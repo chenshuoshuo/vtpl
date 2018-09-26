@@ -155,6 +155,9 @@ public class H3cApLocationSchedule implements java.io.Serializable{
     			location.setLng(locationArray[0]);
     			location.setLat(locationArray[1]);
     			location.setFloorid(view.getFloorid());
+    			location.setLocationMode("3");
+    			location.setInDoor(view.getInDoor());
+    			location.setInSchool(1);
     			location.setLocationTime(new Date());
     			locationLatestService.update(location);
     		}

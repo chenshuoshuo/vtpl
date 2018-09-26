@@ -200,6 +200,7 @@ public class RuijieListenerSchedule{
 				ll.setLocationTime(new Date(byteArrayToLong(temp)));
 				ll.setInDoor(lvr.getInDoor());
 				ll.setInSchool(1);
+				ll.setLocationMode("1");
 				locationLatestService.update(ll);
 			}
 		}

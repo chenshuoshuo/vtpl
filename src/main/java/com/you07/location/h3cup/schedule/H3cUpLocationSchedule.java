@@ -94,6 +94,7 @@ public class H3cUpLocationSchedule {
                             locationLatest.setInDoor(h3cUpAp.getInDoor());
                             locationLatest.setInSchool(1);
                             locationLatest.setLocationTime(new Date());
+                            locationLatest.setLocationMode("2");
 
                             locationLatestService.update(locationLatest);
                         }

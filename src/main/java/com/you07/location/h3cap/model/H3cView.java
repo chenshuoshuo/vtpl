@@ -67,6 +67,11 @@ public class H3cView implements java.io.Serializable{
 	@Column(name = "building_code")
 	private String buildingCode;
 	/**
+	 * 室内/室外，1室内，2室外
+	 */
+	@Column(name = "in_door")
+	private Integer inDoor;
+	/**
 	 * 排序
 	 */
 	@Column(name = "orderid")
@@ -155,6 +160,14 @@ public class H3cView implements java.io.Serializable{
 
 	public void setBuildingCode(String buildingCode) {
 		this.buildingCode = buildingCode;
+	}
+
+	public Integer getInDoor() {
+		return inDoor;
+	}
+
+	public void setInDoor(Integer inDoor) {
+		this.inDoor = inDoor;
 	}
 
 	public Integer getOrderid() {
