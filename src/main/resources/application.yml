@@ -1,0 +1,82 @@
+server:
+  port: 8081
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    buffer-size: 2048
+    direct-buffers: true
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+druid:
+  type: com.alibaba.druid.pool.DruidDataSource
+  postgresdefault:
+    dirver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://10.10.31.83:5432/vtpl
+    username: postgres
+    password: lqkj!@#456
+  postgresgis:
+    dirver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://10.10.31.117:5432/zhongyuan
+    username: postgres
+    password: lqkj!@#456
+  postgres-eas:
+    dirver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://10.10.31.117:5432/cmcci
+    username: postgres
+    password: lqkj!@#456
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
+  helper-dialect: PostgreSQL
+mapper:
+  mappers: BaseDao
+  not-empty: false
+logging:
+  config: classpath:log4j2.xml
+  level:
+    com.you07.eas.dao: debug
+    com.you07.location.dao: debug
+
+flyway:
+  baseline-on-migrate: true
+
+#身份认证系统:
+#1城市热点
+cas:
+  cas-type: '1'
+  #城市热点参数
+  city-hot:
+    udp-port: 61440
+
+#定位系统：
+#1锐捷主动推送
+#2华三泛定位
+#3华三AP定位
+location:
+  location-type: '2'
+  #锐捷主动推送定位参数
+  ruijie:
+    scoket-port: 22166
+  #华三泛定位参数
+  h3c-up:
+    host: '10.10.22.214'
+    port: 8080
+    usr: 'admin'
+    pwd: 'h3cimc@62506024'
+  #华三AP定位参数
+    h3c-ap:
+      host: '10.10.22.214'
+      port: 8080
+      usr: 'admin'
+      pwd: 'h3cimc@62506024'
