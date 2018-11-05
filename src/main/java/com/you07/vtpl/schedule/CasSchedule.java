@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @EnableAsync
 public class CasSchedule {
     @Value("${cas.cas-type}")
-    private String casConfigId;
+    private Integer casConfigId;
     @Autowired
     private CityHotConfig cityHotConfig;
     @Autowired
@@ -24,19 +24,15 @@ public class CasSchedule {
 //    @Scheduled(cron = "0 0 */1 * * ?")
     @Scheduled(cron = "0 * * * * ?")
     public void startSchedule(){
-        String casConfig[] = casConfigId.split(",");
-        for(String configIdStr : casConfig){
-            Integer configId = Integer.parseInt(configIdStr);
-            switch (configId){
-                case 1:
-                {
-                    drudpListenerSchedule.setUdpPort(cityHotConfig.getUdpPort());
-                    drudpListenerSchedule.startJob();
-                    break;
-                }
-                default:
-                    break;
+        switch (casConfigId){
+            case 1:
+            {
+                drudpListenerSchedule.setUdpPort(cityHotConfig.getUdpPort());
+                drudpListenerSchedule.startJob();
+                break;
             }
+            default:
+                break;
         }
     }
 }

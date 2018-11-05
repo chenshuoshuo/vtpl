@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @EnableAsync
 public class LocationSchedule {
     @Value("${location.location-type}")
-    private String locationConfigId;
+    private Integer locationConfigId;
 
     // 锐捷主动推送定位
     @Autowired
@@ -40,40 +40,36 @@ public class LocationSchedule {
     @Autowired
     private H3cApLocationSchedule h3cApLocationSchedule;
 
-    @Async
-//    @Scheduled(cron = "0 0 */1 * * ?")
     @Scheduled(cron = "0 * * * * ?")
     public void startSchedule(){
-        String[] locationConfig = locationConfigId.split(",");
-        for(String configIdStr : locationConfig){
-            Integer configId = Integer.parseInt(configIdStr);
-
-            switch (configId){
-                case 1:
-                {
-                    ruijieListenerSchedule.setSockePort(ruijieConfig.getScoketPort());
-                    ruijieListenerSchedule.startJob();
-                    break;
-                }
-                case 2:
-                {
-                    h3cUpLocationSchedule.setH3cUpConfig(h3cUpConfig);
-                    h3cUpLocationSchedule.updateH3cUploactionSchedule();
-                    break;
-                }
-                case 3 :
-                {
-                    h3cViewUpdateSchedule.setH3cApConfig(h3cApConfig);
-                    h3cViewUpdateSchedule.updateH3cViewSchedule();
-
-                    h3cApLocationSchedule.setH3cApConfig(h3cApConfig);
-                    h3cApLocationSchedule.updateH3cLocationSchedule();
-                    break;
-                }
-
-                default:
-                    break;
+        switch (locationConfigId){
+            case 1:
+            {
+                System.out.println("start ruijie-location");
+                ruijieListenerSchedule.setSockePort(ruijieConfig.getScoketPort());
+                ruijieListenerSchedule.startJob();
+                break;
             }
+            case 2:
+            {
+                System.out.println("start h3c-up-location");
+                h3cUpLocationSchedule.setH3cUpConfig(h3cUpConfig);
+                h3cUpLocationSchedule.updateH3cUploactionSchedule();
+                break;
+            }
+            case 3 :
+            {
+                System.out.println("start h3c-ap-location");
+                h3cViewUpdateSchedule.setH3cApConfig(h3cApConfig);
+                h3cViewUpdateSchedule.updateH3cViewSchedule();
+
+                h3cApLocationSchedule.setH3cApConfig(h3cApConfig);
+                h3cApLocationSchedule.updateH3cLocationSchedule();
+                break;
+            }
+
+            default:
+                break;
         }
     }
 }

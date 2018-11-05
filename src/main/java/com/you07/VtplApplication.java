@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 				"com.you07.location.ruijie.dao",
 				"com.you07.vtpl.dao",
 				"com.you07.location.h3cup.dao",
+				"com.you07.location.h3cap.dao",
 				"com.you07.map.dao"})
 @SpringBootApplication
 @EnableScheduling

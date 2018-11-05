@@ -28,7 +28,7 @@ public class LocationLatestService {
         LocationLatest ll = locationLatestDao.selectByPrimaryKey(sAccout);
 
         locationLatestDao.invalidMac(sMac, sAccout);
-
+        System.out.println("stu is null :" + (stu == null) + "\ntea is null:" + (tea == null));
         if(ll == null){
             String realname, gender, orgCode, orgName;
             realname = gender = orgCode = orgName = "";

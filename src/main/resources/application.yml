@@ -16,19 +16,19 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.10.31.83:5432/vtpl
+    url: jdbc:postgresql://localhost:5432/vtpl
     username: postgres
-    password: lqkj!@#456
+    password: postgres
   postgresgis:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.10.31.117:5432/zhongyuan
+    url: jdbc:postgresql://localhost:5432/qinggongye
     username: postgres
-    password: lqkj!@#456
+    password: postgres
   postgres-eas:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.10.31.117:5432/cmcci
+    url: jdbc:postgresql://localhost:5432/CMCCI
     username: postgres
-    password: lqkj!@#456
+    password: postgres
 
 mybatis:
   configuration:
@@ -46,25 +46,28 @@ logging:
   config: classpath:log4j2.xml
   level:
     com.you07.eas.dao: debug
-    com.you07.location.dao: debug
+    com.you07.vtpl.dao: debug
+    com.you07.map.dao: debug
 
 flyway:
   baseline-on-migrate: true
 
 #身份认证系统:
+#0不对接身份认证
 #1城市热点
 cas:
-  cas-type: '1'
+  cas-type: 1
   #城市热点参数
   city-hot:
     udp-port: 61440
 
 #定位系统：
+#0不对接定位
 #1锐捷主动推送
 #2华三泛定位
 #3华三AP定位
 location:
-  location-type: '2'
+  location-type: 1
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166
@@ -75,8 +78,8 @@ location:
     usr: 'admin'
     pwd: 'h3cimc@62506024'
   #华三AP定位参数
-    h3c-ap:
-      host: '10.10.22.214'
-      port: 8080
-      usr: 'admin'
-      pwd: 'h3cimc@62506024'
+  h3c-ap:
+    host: '10.10.22.214'
+    port: 8080
+    usr: 'admin'
+    pwd: 'h3cimc@62506024'

@@ -48,7 +48,7 @@ public class H3cApLocationSchedule implements java.io.Serializable{
 	}
 
 	public void updateH3cLocationSchedule(){
-
+		System.out.println("h3c-ap-location start !!!");
 		try {
 			initMap();
 			if(client == null){
