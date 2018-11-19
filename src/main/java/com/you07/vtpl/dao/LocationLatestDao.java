@@ -32,4 +32,23 @@ public interface LocationLatestDao extends BaseDao<LocationLatest>{
     })
     LocationLatest loadByAccountMac(@Param("accountMac") String accountMac);
 
+    /**
+     *根据MAC地址
+     * 注销所有用户该MAC
+     * @param mac
+     */
+    @Update({
+            "update location_latest set account_mac = null where account_mac = #{mac} "
+    })
+    void updateByMac(@Param("mac") String mac);
+
+    /**
+     * 根据上网账号accountId获取信息
+     * @param accountId
+     * @return
+     */
+    @Select({
+            "select * from location_latest where account_id = #{accountId} limit 1"
+    })
+    LocationLatest selectByAccountId(@Param("accountId") String accountId);
 }

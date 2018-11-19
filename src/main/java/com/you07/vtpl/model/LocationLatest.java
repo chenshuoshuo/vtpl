@@ -23,6 +23,10 @@ public class LocationLatest {
      */
     private String realname;
     /**
+     * 上网账号
+     */
+    private String accountId;
+    /**
      * 性别
      */
     private String gender;
@@ -181,5 +185,13 @@ public class LocationLatest {
 
     public void setInSchool(Integer inSchool) {
         this.inSchool = inSchool;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 }

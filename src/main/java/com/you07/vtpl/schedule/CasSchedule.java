@@ -2,6 +2,8 @@ package com.you07.vtpl.schedule;
 
 import com.you07.cas.cityhot.config.CityHotConfig;
 import com.you07.cas.cityhot.schedule.DRUDPListenerSchedule;
+import com.you07.cas.ruijie.schedule.RuijieUpdateUserInfoSchedule;
+import com.you07.cas.ruijie.schedule.RuijieUpdateUserMacSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -18,7 +20,10 @@ public class CasSchedule {
     private CityHotConfig cityHotConfig;
     @Autowired
     private DRUDPListenerSchedule drudpListenerSchedule;
-
+    @Autowired
+    private RuijieUpdateUserInfoSchedule ruijieUpdateUserInfoSchedule;
+    @Autowired
+    private RuijieUpdateUserMacSchedule ruijieUpdateUserMacSchedule;
 
     @Async
 //    @Scheduled(cron = "0 0 */1 * * ?")
@@ -29,6 +34,15 @@ public class CasSchedule {
             {
                 drudpListenerSchedule.setUdpPort(cityHotConfig.getUdpPort());
                 drudpListenerSchedule.startJob();
+                break;
+            }
+            case 2:
+            {
+                System.out.println("start_cas_schedule2");
+
+
+                ruijieUpdateUserInfoSchedule.startJob();
+                ruijieUpdateUserMacSchedule.startJob();
                 break;
             }
             default:

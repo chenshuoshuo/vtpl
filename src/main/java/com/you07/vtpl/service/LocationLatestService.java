@@ -76,4 +76,16 @@ public class LocationLatestService {
     public LocationLatest loadByAccountMac(String accountMac){
         return locationLatestDao.loadByAccountMac(accountMac);
     }
+
+    public void add(LocationLatest locationLatest) {
+        locationLatestDao.insert(locationLatest);
+    }
+
+    public LocationLatest getByAccountId(String accountId) {
+        return this.locationLatestDao.selectByAccountId(accountId);
+    }
+
+    public void invalidMac(String mac) {
+        locationLatestDao.updateByMac(mac);
+    }
 }

@@ -24,4 +24,8 @@ public class StudentInfoService {
         return studentInfoDao.loadByStudentNo(studentNo);
     }
 
+    @DataSourceConnection(DataBaseContextHolder.DataBaseType.POSTGRESEAS)
+    public List<StudentInfo> getInSchool(Integer schoolYear){
+        return studentInfoDao.getInSchool(schoolYear);
+    }
 }

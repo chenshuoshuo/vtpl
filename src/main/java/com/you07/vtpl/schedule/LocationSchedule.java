@@ -42,6 +42,7 @@ public class LocationSchedule {
 
     @Scheduled(cron = "0 * * * * ?")
     public void startSchedule(){
+        System.out.println("locationConfigId::"+locationConfigId);
         switch (locationConfigId){
             case 1:
             {
