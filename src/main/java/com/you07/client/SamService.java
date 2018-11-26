@@ -13,7 +13,7 @@ import java.net.URL;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "SamService", targetNamespace = "http://api.spl.ruijie.com/", wsdlLocation = "http://10.100.200.1:8080/sam/services/samapi?wsdl")
+@WebServiceClient(name = "SamService", targetNamespace = "http://api.spl.ruijie.com/", wsdlLocation = "http://10.18.30.1:8080/sam/services/samapi?wsdl")
 public class SamService
     extends Service
 {
@@ -26,7 +26,7 @@ public class SamService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://10.100.200.1:8080/sam/services/samapi?wsdl");
+            url = new URL("http://10.18.30.1:8080/sam/services/samapi?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

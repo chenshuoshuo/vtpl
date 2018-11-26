@@ -45,7 +45,7 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
 		while(hasNextPage){
 			try {
 				QueryOnlineUserParam param = new QueryOnlineUserParam();
-				param.setNasIp(ruijieCasConfig.getIp());
+				param.setNasIp("10.18.0.9");
 				param.setOffSet((page - 1 ) * pageSize);
 				param.setLimit(pageSize);
 				QueryOnlineUserResult queryOnlineUserResult = samServicePortType.queryOnlineUser(param);
@@ -71,10 +71,7 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
                                 locationLatest.setAccountMac(mac);
                                 locationLatestService.update(locationLatest);
                             } else{
-                                locationLatest = new LocationLatest();
-                                locationLatest.setAccountId(accountId);
-                                locationLatest.setAccountMac(mac);
-                                locationLatestService.add(locationLatest);
+                                locationLatestService.saveUser(accountId,mac,null);
                             }
                         }
                     }
@@ -82,9 +79,8 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
                 }
 			} catch (Exception e) {
 				e.printStackTrace();
-				continue;
+                continue;
 			}
-
 		}
 	}
     

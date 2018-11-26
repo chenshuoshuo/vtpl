@@ -40,9 +40,9 @@ public class LocationSchedule {
     @Autowired
     private H3cApLocationSchedule h3cApLocationSchedule;
 
+    @Async
     @Scheduled(cron = "0 * * * * ?")
     public void startSchedule(){
-        System.out.println("locationConfigId::"+locationConfigId);
         switch (locationConfigId){
             case 1:
             {

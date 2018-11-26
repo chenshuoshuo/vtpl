@@ -68,7 +68,7 @@ public class RuijieUpdateUserInfoSchedule implements java.io.Serializable{
 					return;
 				}
 				List<UserInfo> userInfoList = queryUserResult.getData();
-				System.out.println("page:" + page + ", list-size:" + userInfoList.size());
+//				System.out.println("page:" + page + ", list-size:" + userInfoList.size());
 				if(userInfoList == null || userInfoList.size() == 0){
 					hasNextPage = false;
 					break;

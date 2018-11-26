@@ -26,9 +26,9 @@ public class CasSchedule {
     private RuijieUpdateUserMacSchedule ruijieUpdateUserMacSchedule;
 
     @Async
-//    @Scheduled(cron = "0 0 */1 * * ?")
     @Scheduled(cron = "0 * * * * ?")
     public void startSchedule(){
+        System.out.println("casConfigId:"+casConfigId);
         switch (casConfigId){
             case 1:
             {
@@ -38,9 +38,7 @@ public class CasSchedule {
             }
             case 2:
             {
-                System.out.println("start_cas_schedule2");
-
-
+                System.out.println("start_ruijie_cas");
                 ruijieUpdateUserInfoSchedule.startJob();
                 ruijieUpdateUserMacSchedule.startJob();
                 break;

@@ -45,9 +45,9 @@ mapper:
 logging:
   config: classpath:log4j2.xml
   level:
-    com.you07.eas.dao: debug
-    com.you07.vtpl.dao: debug
-    com.you07.map.dao: debug
+    #com.you07.eas.dao: debug
+    #com.you07.vtpl.dao: debug
+    #com.you07.map.dao: debug
 
 flyway:
   baseline-on-migrate: true
@@ -55,14 +55,15 @@ flyway:
 #身份认证系统:
 #0不对接身份认证
 #1城市热点
+#2锐捷上网身份认证
 cas:
   cas-type: 2
   #城市热点参数
   city-hot:
     udp-port: 61440
-#2锐捷上网身份认证
+#锐捷上网身份认证
   ruijie:
-    ip: '20.255.100.5'
+    ip: '10.18.0.9'
 
 #定位系统：
 #0不对接定位
