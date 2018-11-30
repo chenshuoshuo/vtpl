@@ -36,7 +36,7 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
 		Boolean hasNextPage = true;// 定义是否还有下一页
 		Integer page = 1;// 当前请求的页码
 		Integer pageSize = 200;// 每页请求的数据条数，最大只支持200
-
+		int i = 0;
 		SamServicePortType samServicePortType = new SamService().getSamServicePort();
 		if(samServicePortType == null){
 			System.out.println("SAM服务器为null");
@@ -54,6 +54,8 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
                     return;
                 }
 				List<OnlineUserInfo> onlineUserInfoList = queryOnlineUserResult.getOnlineUserInfos();
+				Thread.sleep(500);
+				System.out.println("mac请求次数:::"+i++);
 //				System.out.println("page:" + page + ", list-size:" + onlineUserInfoList.size());
 				if(onlineUserInfoList == null || onlineUserInfoList.size() == 0){
                     hasNextPage = false;
