@@ -51,4 +51,18 @@ public interface LocationLatestDao extends BaseDao<LocationLatest>{
             "select * from location_latest where account_id = #{accountId} limit 1"
     })
     LocationLatest selectByAccountId(@Param("accountId") String accountId);
+
+    /**
+     * 根据上网账号/MAC
+     * 注销绑定的信息
+     * @param accountId
+     * @param userid
+     * @return
+     */
+    @Update({
+            "update location_latest set account_id = null where account_id = #{accountId}",
+            "and userid != #{userid}"
+    })
+    int invalidAccountId(@Param("accountMac") String accountId,
+                   @Param("userid") String userid);
 }

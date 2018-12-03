@@ -71,6 +71,13 @@ public class LocationLatestService {
         return locationLatestDao.updateByPrimaryKeySelective(locationLatest);
     }
 
+    public void invalidAccountId(String accountId, String userId){
+        locationLatestDao.invalidAccountId(accountId, userId);
+    }
+
+    public LocationLatest get(String userId){
+        return locationLatestDao.selectByPrimaryKey(userId);
+    }
 
 
     public LocationLatest loadByAccountMac(String accountMac){

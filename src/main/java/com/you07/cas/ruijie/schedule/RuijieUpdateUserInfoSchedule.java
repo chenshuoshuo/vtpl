@@ -84,7 +84,8 @@ public class RuijieUpdateUserInfoSchedule implements java.io.Serializable{
 
 							LocationLatest mapLocationLatest = USER_MAP.get(userid);
 
-							LocationLatest locationLatest = locationLatestService.getByAccountId(accountId);
+							locationLatestService.invalidAccountId(accountId, userid);
+							LocationLatest locationLatest = locationLatestService.get(userid);
 							if(locationLatest != null){
 								locationLatest.setUserid(userid);
 								locationLatest.setRealname(mapLocationLatest.getRealname());
