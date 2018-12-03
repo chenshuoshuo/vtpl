@@ -63,6 +63,6 @@ public interface LocationLatestDao extends BaseDao<LocationLatest>{
             "update location_latest set account_id = null where account_id = #{accountId}",
             "and userid != #{userid}"
     })
-    int invalidAccountId(@Param("accountMac") String accountId,
+    int invalidAccountId(@Param("accountId") String accountId,
                    @Param("userid") String userid);
 }
