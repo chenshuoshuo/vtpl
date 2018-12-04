@@ -49,6 +49,10 @@ public class LocationLatestService {
 
                 ll = new LocationLatest();
 
+                if(gender == null){
+                    gender = "1";
+                }
+
                 ll.setUserid(sAccout);
                 ll.setGender(gender);
                 ll.setRealname(realname);

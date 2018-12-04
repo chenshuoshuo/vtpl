@@ -39,7 +39,7 @@ public class CasSchedule {
             case 2:
             {
                 System.out.println("start_ruijie_cas");
-                ruijieUpdateUserInfoSchedule.startJob();
+//                ruijieUpdateUserInfoSchedule.startJob();
                 ruijieUpdateUserMacSchedule.startJob();
                 break;
             }

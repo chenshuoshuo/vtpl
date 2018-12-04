@@ -81,7 +81,7 @@ public class RuijieUpdateUserInfoSchedule implements java.io.Serializable{
 						if(StringUtil.isNotEmpty(accountId) && StringUtil.isNotEmpty(userid) && USER_MAP.containsKey(userid.toLowerCase())){
 							accountId = accountId.toLowerCase();
 							userid = userid.toLowerCase();
-
+							System.out.println(userid + ":" + accountId);
 							LocationLatest mapLocationLatest = USER_MAP.get(userid);
 
 							locationLatestService.invalidAccountId(accountId, userid);

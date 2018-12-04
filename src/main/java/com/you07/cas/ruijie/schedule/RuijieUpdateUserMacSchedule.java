@@ -9,6 +9,7 @@ import com.you07.vtpl.service.LocationLatestService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.sql.SQLOutput;
 import java.util.List;
 
 /**
@@ -54,9 +55,9 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
                     return;
                 }
 				List<OnlineUserInfo> onlineUserInfoList = queryOnlineUserResult.getOnlineUserInfos();
-				Thread.sleep(500);
-				System.out.println("mac请求次数:::"+i++);
-//				System.out.println("page:" + page + ", list-size:" + onlineUserInfoList.size());
+//				Thread.sleep(500);
+//				System.out.println("mac request count :"+i++);
+				System.out.println("mac request info : page:" + page + ", list-size:" + onlineUserInfoList.size());
 				if(onlineUserInfoList == null || onlineUserInfoList.size() == 0){
                     hasNextPage = false;
                     break;
@@ -64,17 +65,18 @@ public class RuijieUpdateUserMacSchedule implements java.io.Serializable{
                     for(OnlineUserInfo onlineUserInfo : onlineUserInfoList){
                         String accountId = onlineUserInfo.getAccountId();
                         String mac = onlineUserInfo.getUserMac();
+//						System.out.println(accountId + ":" + mac);
                         if(StringUtil.isNotEmpty(accountId) && StringUtil.isNotEmpty(mac)){
                             accountId = accountId.toLowerCase();
                             mac = mac.toLowerCase();
-                            locationLatestService.invalidMac(mac);
-                            LocationLatest locationLatest = locationLatestService.getByAccountId(accountId);
-                            if(locationLatest != null){
-                                locationLatest.setAccountMac(mac);
-                                locationLatestService.update(locationLatest);
-                            } else{
+//                            locationLatestService.invalidMac(mac);
+//                            LocationLatest locationLatest = locationLatestService.getByAccountId(accountId);
+//                            if(locationLatest != null){
+//                                locationLatest.setAccountMac(mac);
+//                                locationLatestService.update(locationLatest);
+//                            } else{
                                 locationLatestService.saveUser(accountId,mac,null);
-                            }
+//                            }
                         }
                     }
                     page += 1;
