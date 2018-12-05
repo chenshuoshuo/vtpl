@@ -61,7 +61,7 @@ public class RuijieListenerSchedule{
 			
 			ss = new ServerSocket(sockePort);
 			Socket client = null;
-			System.out.println("Tcp定位数据服务器启动");		
+//			System.out.println("Tcp定位数据服务器启动");
 			while (true) {
 				client = ss.accept();
 				InputStream in = client.getInputStream();
@@ -139,7 +139,7 @@ public class RuijieListenerSchedule{
 				// 如果接收完毕，就处理数据
 				byte[] data = new byte[dataLen];
 				System.arraycopy(src, 0, data, 0, dataLen);
-                System.out.println("initDataFormBytes::"+data.length);
+//                System.out.println("initDataFormBytes::"+data.length);
 				initDataFromBytes(data);
 				// 缓存剩下的数据，重新进入函数
 				buffer.clear();
@@ -180,7 +180,7 @@ public class RuijieListenerSchedule{
 		
 		byte[] temp = newByteArray(data, 16, 6);
 		String mac = byteArrayToHexString(temp);
-		System.out.println("mac:" + mac);
+//		System.out.println("mac:" + mac);
 		LocationLatest ll = locationLatestService.loadByAccountMac(mac);
 		if(ll != null){
 			temp = newByteArray(data, 4, 4);
@@ -202,7 +202,7 @@ public class RuijieListenerSchedule{
 				ll.setInDoor(lvr.getInDoor());
 				ll.setInSchool(1);
 				ll.setLocationMode("1");
-                System.out.println("updateLL:"+ll.getRealname()+ll.getLat()+"lng:"+ll.getLng());
+//                System.out.println("updateLL:"+ll.getRealname()+ll.getLat()+"lng:"+ll.getLng());
 				locationLatestService.update(ll);
 			}
 		}
