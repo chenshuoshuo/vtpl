@@ -16,17 +16,17 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.4.234:5432/vtpl
+    url: jdbc:postgresql://172.18.156.113:5432/vtpl
     username: postgres
-    password: postgres
+    password: lqkj!@#456
   postgresgis:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.4.234:5432/qinggongye
+    url: jdbc:postgresql://202.196.16.81:5432/hngydx
     username: postgres
     password: postgres
   postgres-eas:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.4.234:5432/CMCCI
+    url: jdbc:postgresql://202.196.16.81:5432/CMCCI
     username: postgres
     password: postgres
 
@@ -56,14 +56,21 @@ flyway:
 #0不对接身份认证
 #1城市热点
 #2锐捷上网身份认证
+#3深澜身份认证
 cas:
-  cas-type: 2
+  cas-type: 3
   #城市热点参数
   city-hot:
     udp-port: 61440
 #锐捷上网身份认证
   ruijie:
     ip: '10.18.0.9'
+#深澜身份认证
+  shenlan:
+    udp-port: 48910
+
+
+
 
 #定位系统：
 #0不对接定位
@@ -71,7 +78,7 @@ cas:
 #2华三泛定位
 #3华三AP定位
 location:
-  location-type: 1
+  location-type: 0
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166

@@ -32,11 +32,11 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 		<!-- 锐捷提供的jar包 -->
-		<dependency>
-			<groupId>com.ruijie.util</groupId>
-			<artifactId>client</artifactId>
-			<version>1.0</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.ruijie.util</groupId>-->
+			<!--<artifactId>client</artifactId>-->
+			<!--<version>1.0</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -297,6 +297,12 @@
 			<groupId>org.osgeo</groupId>
 			<artifactId>proj4j</artifactId>
 			<version>0.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.jradius</groupId>
+			<artifactId>jradius-client</artifactId>
+			<version>1.1.5</version>
 		</dependency>
 	</dependencies>
 
