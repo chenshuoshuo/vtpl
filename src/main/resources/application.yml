@@ -47,7 +47,8 @@ logging:
   level:
     #com.you07.eas.dao: debug
     #com.you07.vtpl.dao: debug
-    #com.you07.map.dao: debug
+    # com.you07.map.dao: debug
+    #com.you07.location.huawei.dao: debug
 
 flyway:
   baseline-on-migrate: true
@@ -77,8 +78,9 @@ cas:
 #1锐捷主动推送
 #2华三泛定位
 #3华三AP定位
+#4华为泛定位
 location:
-  location-type: 0
+  location-type: 4
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166
@@ -94,3 +96,6 @@ location:
     port: 8080
     usr: 'admin'
     pwd: 'h3cimc@62506024'
+  #4华为泛定位
+  huawei:
+    udp_port: 32180

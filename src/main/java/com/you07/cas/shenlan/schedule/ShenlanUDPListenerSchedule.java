@@ -52,55 +52,44 @@ public class ShenlanUDPListenerSchedule {
             System.out.println(udpPort);
             //绑定端口
             serverSocket = new DatagramSocket(udpPort);
+            byte[] receiveData = new byte[1024];
             System.out.println("start udp server...");
             while (true) {
-                byte[] receiveData = new byte[1024];
-                System.out.println("this is one");
-                //将数据填充到UDP包
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                String data = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("data:" + data);
-                System.out.println("this is two");
-                try{
-                    //设置超时时间2秒
-                    serverSocket.setSoTimeout(2000);
-//                    serverSocket.wait(2000);
-                    //收发UDP包
-                    serverSocket.receive(receivePacket);
-                }catch (Exception e){
-                    return;
-                }
-                InetAddress IPAddress = receivePacket.getAddress();
-                int port = receivePacket.getPort();
-                System.out.println("this is three");
-//                String data = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("this is four");
-                System.out.println("data:" + data);
-                System.out.println("this is ok");
-                //去除报文网络头和包头,因为报文头20字节，包头42字节
-                byte[] temp = new byte[receiveData.length - 62];
-                //复制数组，从receiveData的62位开始复制到temp的0位开始，长度为temp.length
-                System.arraycopy(receiveData, 62, temp, 0, temp.length);
+                serverSocket.receive(receivePacket);
+                int length= receivePacket.getLength();
+                System.out.println(length);
+                // 去除空和包头
+                byte[] temp = new byte[length-20];
+                System.arraycopy(receiveData, 20, temp, 0, length-20);
                 TlvTools tlvTools = new TlvTools();
                 tlvTools.unpack(temp);
                 String mac="";
                 String name="";
                 String mode="";
-                System.out.println("start data insert");
                 for (int i = 0; i < tlvTools.tlvList.size(); i++) {
                     Tlv tlv = tlvTools.tlvList.get(i);
                     if (tlv.getTag() == 31) {
-                        mac = getFieldValue(tlv.getValue(), 0, tlv.getLen() - 2, "string");
-                        System.out.println("mac: " +mac );
+                         mac = getFieldValue(tlv.getValue(), 0, tlv.getLen() - 2, "string");
+                        System.out.println("mac: " + mac);
                     } else if (tlv.getTag() == 1) {
-                        name = getFieldValue(tlv.getValue(), 0, tlv.getLen() - 2, "string");
+                         name = getFieldValue(tlv.getValue(), 0, tlv.getLen() - 2, "string");
                         System.out.println("name: " + name);
                     }
+
                 }
-                locationLatestService.saveUser(name,mac,mode);
-                byte[] sendData = {0, 0, 0, (byte)0x80, 0, 0, 0, 0};
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
-                serverSocket.send(sendPacket);
+                String realMac="";
+                for (int i = 0; i < mac.length(); i++) {
+                    if(mac.charAt(i) != '-'){
+                        realMac += mac.charAt(i);
+                    }
+                }
+                System.out.println("realMac is "+ realMac);
+                String lowerRealMac=realMac.toLowerCase();
+                System.out.println("lowerRealMac is "+ lowerRealMac);
+                System.out.println("start data insert");
+                locationLatestService.saveUser(name,lowerRealMac,mode);
+
             }
         } catch (SocketException e) {
             e.printStackTrace();

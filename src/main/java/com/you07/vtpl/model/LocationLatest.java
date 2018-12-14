@@ -63,7 +63,7 @@ public class LocationLatest {
      */
     private Date usrUpdateTime;
     /**
-     * 定位方式
+     * 定位方式，1ap,2接口定位
      */
     private String locationMode;
     /**

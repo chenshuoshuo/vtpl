@@ -5,6 +5,8 @@ import com.you07.location.h3cap.schedule.H3cApLocationSchedule;
 import com.you07.location.h3cap.schedule.H3cViewUpdateSchedule;
 import com.you07.location.h3cup.config.H3cUpConfig;
 import com.you07.location.h3cup.schedule.H3cUpLocationSchedule;
+import com.you07.location.huawei.config.HuaWeiConfig;
+import com.you07.location.huawei.schedule.HuaWeiUDPListenerSchedule;
 import com.you07.location.ruijie.config.RuijieConfig;
 import com.you07.location.ruijie.schedule.RuijieListenerSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,12 @@ public class LocationSchedule {
     @Autowired
     private H3cApLocationSchedule h3cApLocationSchedule;
 
+    //华为定位
+    @Autowired
+    private HuaWeiConfig huaWeiConfig;
+    @Autowired
+    private HuaWeiUDPListenerSchedule huaWeiUDPListenerSchedule;
+
     @Async
     @Scheduled(cron = "0 * * * * ?")
     public void startSchedule(){
@@ -67,6 +75,12 @@ public class LocationSchedule {
                 h3cApLocationSchedule.setH3cApConfig(h3cApConfig);
                 h3cApLocationSchedule.updateH3cLocationSchedule();
                 break;
+            }
+            case 4:{
+                System.out.println("start huawei-location");
+                huaWeiUDPListenerSchedule.setUdpPort(huaWeiConfig.getUdpPort());
+                huaWeiUDPListenerSchedule.startJob();
+
             }
 
             default:

@@ -96,6 +96,7 @@ public class H3cUpLocationSchedule {
                             locationLatest.setLocationTime(new Date());
                             locationLatest.setLocationMode("2");
 
+
                             locationLatestService.update(locationLatest);
                         }
                     }
