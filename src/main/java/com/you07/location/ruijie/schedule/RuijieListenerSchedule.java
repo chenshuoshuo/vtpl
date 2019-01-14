@@ -5,6 +5,7 @@ import com.you07.location.ruijie.service.LocationViewRuijieService;
 import com.you07.vtpl.model.LocationLatest;
 import com.you07.vtpl.service.LocationLatestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.DataInputStream;
@@ -165,7 +166,8 @@ public class RuijieListenerSchedule{
 		return byteArrayToShort(new byte[] { buff[2],
 				buff[3] });
 	}
-	
+
+	@Async
 	public void initDataFromBytes(byte[] data) {
 		if (data == null || data.length < 51) {
 			return;
