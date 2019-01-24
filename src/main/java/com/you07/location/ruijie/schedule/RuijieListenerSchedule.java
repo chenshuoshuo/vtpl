@@ -57,34 +57,32 @@ public class RuijieListenerSchedule{
 	
 	public void startRuijieListener(){
 		try {
-			
 			initViewMap();
 			
 			ss = new ServerSocket(sockePort);
 			Socket client = null;
 //			System.out.println("Tcp定位数据服务器启动");
 			while (true) {
-				client = ss.accept();
-				InputStream in = client.getInputStream();
-				DataInputStream ins = new DataInputStream(in);
-				byte[] buff = new byte[1024];
-				ByteBuffer buffer = ByteBuffer.allocateDirect(2048);
-				int len = 0;
-				while ((len = ins.read(buff)) != -1) {
-					buffer.put(buff, 0, len);
-					try {
+				try {
+					client = ss.accept();
+					InputStream in = client.getInputStream();
+					DataInputStream ins = new DataInputStream(in);
+					byte[] buff = new byte[1024];
+					ByteBuffer buffer = ByteBuffer.allocateDirect(2048);
+					int len = 0;
+					while ((len = ins.read(buff)) != -1) {
+						buffer.put(buff, 0, len);
 						processData(buffer);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						continue;
+					}// 循环读取数据
+					if (in != null){
+						in.close();
 					}
-				}// 循环读取数据
-				if (in != null){
-					in.close();
-				}
-				if (client != null){
-					client.close();
+					if (client != null){
+						client.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					continue;
 				}
 			}   // 循环获取连接
 		} catch (IOException e) {
@@ -134,7 +132,11 @@ public class RuijieListenerSchedule{
 			} else if (src.length == dataLen) {
 				byte[] data = new byte[dataLen];
 				System.arraycopy(src, 0, data, 0, dataLen);
-				initDataFromBytes(data);
+				try {
+					initDataFromBytes(data);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				buffer.clear();
 			} else if (src.length > dataLen) {
 				// 如果接收完毕，就处理数据
@@ -179,7 +181,6 @@ public class RuijieListenerSchedule{
 		if (len != data.length) {
 			return;
 		}
-		
 		byte[] temp = newByteArray(data, 16, 6);
 		String mac = byteArrayToHexString(temp);
 //		System.out.println("mac:" + mac);
@@ -204,7 +205,7 @@ public class RuijieListenerSchedule{
 				ll.setInDoor(lvr.getInDoor());
 				ll.setInSchool(1);
 				ll.setLocationMode("1");
-//                System.out.println("updateLL:"+ll.getRealname()+ll.getLat()+"lng:"+ll.getLng());
+//                System.out.println("userId:"+ll.getUserid() + ",time:"+ll.getLocationTime().getTime());
 				locationLatestService.update(ll);
 			}
 		}
