@@ -85,7 +85,7 @@ public class ShenlanUDPListenerSchedule {
                     }
                 }
                 System.out.println("realMac is "+ realMac);
-                String lowerRealMac=realMac.toLowerCase();
+                String lowerRealMac=realMac.replace(":","").toLowerCase();
                 System.out.println("lowerRealMac is "+ lowerRealMac);
                 System.out.println("start data insert");
                 locationLatestService.saveUser(name,lowerRealMac,mode);

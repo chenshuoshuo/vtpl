@@ -74,15 +74,20 @@ public class HuaWeiUDPListenerSchedule {
                 System.out.println("===================");
                 LocationLatest ll=locationLatestService.loadByAccountMac(zdMac);
                 HwAp hwAp=hwApService.selectHwapByMac(apMac);
-                if(ll != null && hwAp !=null){
-                    ll.setLng(hwAp.getLng());
-                    ll.setLat(hwAp.getLat());
-                    ll.setFloorid(hwAp.getFloorid());
-                    ll.setInDoor(hwAp.getIndoor());
-                    ll.setLocationTime(new Date());
-                    ll.setInSchool(1);
-                    ll.setLocationMode("1");
-                    locationLatestService.update(ll);
+                try {
+                    if(ll != null && hwAp !=null){
+                        ll.setLng(hwAp.getLng());
+                        ll.setLat(hwAp.getLat());
+                        ll.setFloorid(hwAp.getFloorid());
+                        ll.setInDoor(hwAp.getIndoor());
+                        ll.setLocationTime(new Date());
+                        ll.setInSchool(1);
+                        ll.setLocationMode("1");
+                        locationLatestService.update(ll);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
                 }
             }
         } catch (SocketException e) {
