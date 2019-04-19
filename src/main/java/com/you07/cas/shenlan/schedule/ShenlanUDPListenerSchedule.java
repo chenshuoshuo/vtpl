@@ -88,8 +88,11 @@ public class ShenlanUDPListenerSchedule {
                 String lowerRealMac=realMac.replace(":","").toLowerCase();
                 System.out.println("lowerRealMac is "+ lowerRealMac);
                 System.out.println("start data insert");
-                locationLatestService.saveUser(name,lowerRealMac,mode);
-
+                try {
+                    locationLatestService.saveUser(name,lowerRealMac,mode);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         } catch (SocketException e) {
             e.printStackTrace();

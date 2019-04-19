@@ -63,7 +63,7 @@ public class HuaWeiUDPListenerSchedule {
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
                 String data = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("data:" + data);
+                //System.out.println("data:" + data);
                 String apMac = getFieldValue(receiveData, 3, 6, "mac");//帐户上报AP 的MAC 地址
                 String zdMac = getFieldValue(receiveData, 14, 6, "mac");//WIFI终端的MAC地址
                 System.out.println("===================");
