@@ -1,6 +1,7 @@
 package com.you07.vtpl.dao;
 
 import com.you07.vtpl.model.LocationHistory;
+import com.you07.vtpl.model.RemovalLocation;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -290,4 +291,32 @@ public interface LocationHistoryDao {
                                                   @Param("endTime") String endTime,
                                                   @Param("inSchool") Integer inSchool,
                                                   @Param("zoneId") Integer zoneId);
+
+    /**
+     * @Author Wells
+     * @Description //TODO 根据时间范围查询去重AP定位数据
+     * @Date 19:57 2019/7/11
+     * @Param [tableName, startTime, endTime, inSchool, zoneId]
+     * @return java.util.List<com.you07.vtpl.model.LocationHistory>
+     **/
+    @Select({
+            "select",
+                    "distinct on (userid) userid,",
+                    "first_value(lng) over w1 start_lng,",
+                    "first_value(lat) over w1 start_lat,",
+                    "last_value(lng) over w1 end_lng, ",
+                    "last_value(lat) over w1 end_lat",
+             "FROM ${tableName}",
+                    "WHERE",
+                    "location_time > to_timestamp(#{startTime},'yyyy-mm-dd hh24:mi:ss')",
+                    "and location_time < to_timestamp(#{endTime},'yyyy-mm-dd hh24:mi:ss')",
+                    "and in_school = #{inSchool}",
+                    "and zone_id = '${zoneId}'",
+                    "window w1 as (PARTITION BY userid order by location_time)"
+    })
+    List<RemovalLocation> removalLocations(@Param("tableName") String tableName,
+                                           @Param("startTime") String startTime,
+                                           @Param("endTime") String endTime,
+                                           @Param("inSchool") Integer inSchool,
+                                           @Param("zoneId") Integer zoneId);
 }

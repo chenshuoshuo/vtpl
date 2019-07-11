@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.you07.vtpl.dao.LocationHistoryDao;
 import com.you07.vtpl.model.LocationHistory;
+import com.you07.vtpl.model.RemovalLocation;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -176,4 +177,8 @@ public class LocationHitoryService {
     }
 
 
+    public PageInfo<RemovalLocation> removalLocations(String startTime, String endTime, Integer inSchool, Integer zoneId, Integer page, Integer pageSize) throws Exception{
+        PageHelper.startPage(page,pageSize);
+        return new PageInfo<RemovalLocation>(locationHistoryDao.removalLocations(data2Table(startTime), startTime, endTime, inSchool, zoneId));
+    }
 }

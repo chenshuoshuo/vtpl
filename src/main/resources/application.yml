@@ -16,9 +16,9 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.4.240:5432/vtpl_dev1
+    url: jdbc:postgresql://192.168.4.241:5432/vtpl_plus
     username: postgres
-    password: postgres
+    password: lqkj007
   postgresgis:
     dirver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://202.196.16.81:5432/hngydx

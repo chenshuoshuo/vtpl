@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.you07.config.message.MessageBean;
 import com.you07.config.message.MessageListBean;
 import com.you07.vtpl.model.LocationHistory;
+import com.you07.vtpl.model.RemovalLocation;
 import com.you07.vtpl.service.LocationHitoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,5 +57,32 @@ public class ThirdLocationController {
         }
         return JSON.toJSONString(messageBean, SerializerFeature.DisableCircularReferenceDetect);
     }
+
+    @ApiOperation("根据时间查询去重定位，不支持跨天查詢")
+    @GetMapping("/removalLocations")
+    @ResponseBody
+    public String removalLocations(@ApiParam(name="startTime",value="开始时间，格式：'yyyy-MM-dd HH:mm:ss'",required=true) @RequestParam(name = "startTime",required = true) String startTime,
+                            @ApiParam(name="endTime",value="结束时间，格式：'yyyy-MM-dd HH:mm:ss'",required=true) @RequestParam(name = "endTime", required = true, defaultValue = "") String endTime,
+                            @ApiParam(name="inSchool",value="校内校外，1校内，2校外",required=true) @RequestParam(name = "inSchool",required = true) Integer inSchool,
+                            @ApiParam(name="zoneId",value="地图区域ID",required=true) @RequestParam(name = "zoneId",required = true) Integer zoneId,
+                            @ApiParam(name="page",value = "页数",required = true)@RequestParam(name = "page",required = true) Integer page,
+                            @ApiParam(name="pageSize",value = "每页显示条数",required = true)@RequestParam(name = "pageSize",required = true) Integer pageSize){
+        MessageBean<PageInfo<RemovalLocation>> messageBean = new MessageBean<PageInfo<RemovalLocation>>();
+        try {
+            PageInfo<RemovalLocation> pageInfo = locationHitoryService.removalLocations(startTime, endTime, inSchool, zoneId,page,pageSize);
+            messageBean.setData(pageInfo);
+            messageBean.setStatus(true);
+            messageBean.setCode(200);
+            messageBean.setMessage("获取成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            messageBean.setStatus(false);
+            messageBean.setCode(10001);
+            messageBean.setMessage("接口错误");
+        }
+        return JSON.toJSONString(messageBean, SerializerFeature.DisableCircularReferenceDetect);
+    }
+
+
 
 }
