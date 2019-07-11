@@ -2,16 +2,9 @@ package com.you07.vtpl.model;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
-/**
- * 用户最新位置信息
- * @author RY
- * @since 2018-8-8 15:48:49
- */
-@Table(name = "location_latest")
-public class LocationLatest {
+public class LocationHistory {
     /**
      * 用户ID
      */
@@ -22,10 +15,6 @@ public class LocationLatest {
      * 姓名
      */
     private String realname;
-    /**
-     * 上网账号
-     */
-    private String accountId;
     /**
      * 性别
      */
@@ -63,7 +52,7 @@ public class LocationLatest {
      */
     private Date usrUpdateTime;
     /**
-     * 定位方式，1ap,2接口定位
+     * 定位方式
      */
     private String locationMode;
     /**
@@ -76,10 +65,13 @@ public class LocationLatest {
     private Integer inSchool;
     /**
      * 校区ID
-     * */
+     */
     private String zoneId;
 
-
+    /**
+     * 停留时间
+     */
+    private String detainedTime;
 
     public String getUserid() {
         return userid;
@@ -193,12 +185,12 @@ public class LocationLatest {
         this.inSchool = inSchool;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public String getDetainedTime() {
+        return detainedTime;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setDetainedTime(String detainedTime) {
+        this.detainedTime = detainedTime;
     }
 
     public String getZoneId() {

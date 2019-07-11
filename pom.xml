@@ -6,7 +6,7 @@
 	<groupId>com.you07</groupId>
 	<artifactId>vtpl</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>vtpl</name>
 	<description>Viual Track Big Data Platform License</description>
@@ -85,11 +85,6 @@
 		</dependency>
 
 		<!--分页-->
-		<!--<dependency>-->
-		<!--<groupId>com.github.pagehelper</groupId>-->
-		<!--<artifactId>pagehelper</artifactId>-->
-		<!--<version>5.1.2</version>-->
-		<!--</dependency>-->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -321,7 +316,43 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<executions>
+					<!-- 替换会被 maven 特别处理的 default-compile -->
+					<execution>
+						<id>default-compile</id>
+						<phase>none</phase>
+					</execution>
+					<!-- 替换会被 maven 特别处理的 default-testCompile -->
+					<execution>
+						<id>default-testCompile</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>java-compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>java-test-compile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
+
 </project>

@@ -16,9 +16,9 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://172.18.156.113:5432/vtpl
+    url: jdbc:postgresql://192.168.4.240:5432/vtpl_dev1
     username: postgres
-    password: lqkj!@#456
+    password: postgres
   postgresgis:
     dirver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://202.196.16.81:5432/hngydx
@@ -59,7 +59,7 @@ flyway:
 #2锐捷上网身份认证
 #3深澜身份认证
 cas:
-  cas-type: 3
+  cas-type: 0
   #城市热点参数
   city-hot:
     udp-port: 61440
@@ -80,7 +80,7 @@ cas:
 #3华三AP定位
 #4华为泛定位
 location:
-  location-type: 4
+  location-type: 0
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166
