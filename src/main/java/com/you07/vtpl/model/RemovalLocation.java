@@ -10,7 +10,7 @@ package com.you07.vtpl.model;
 public class RemovalLocation {
     private String userid;
     private Double startLng;
-    private Double srartLat;
+    private Double startLat;
     private Double endLng;
     private Double endLat;
 
@@ -30,13 +30,6 @@ public class RemovalLocation {
         this.startLng = startLng;
     }
 
-    public Double getSrartLat() {
-        return srartLat;
-    }
-
-    public void setSrartLat(Double srartLat) {
-        this.srartLat = srartLat;
-    }
 
     public Double getEndLng() {
         return endLng;
@@ -52,5 +45,13 @@ public class RemovalLocation {
 
     public void setEndLat(Double endLat) {
         this.endLat = endLat;
+    }
+
+    public Double getStartLat() {
+        return startLat;
+    }
+
+    public void setStartLat(Double startLat) {
+        this.startLat = startLat;
     }
 }
