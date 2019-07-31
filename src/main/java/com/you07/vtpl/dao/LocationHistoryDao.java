@@ -304,15 +304,15 @@ public interface LocationHistoryDao {
                     "distinct on (userid) userid,",
                     "first_value(lng) over w1 start_lng,",
                     "first_value(lat) over w1 start_lat,",
-                    "last_value(lng) over w1 end_lng, ",
-                    "last_value(lat) over w1 end_lat",
+                    "last_value(lng) over w2 end_lng, ",
+                    "last_value(lat) over w2 end_lat",
              "FROM ${tableName}",
                     "WHERE",
                     "location_time > to_timestamp(#{startTime},'yyyy-mm-dd hh24:mi:ss')",
                     "and location_time < to_timestamp(#{endTime},'yyyy-mm-dd hh24:mi:ss')",
                     "and in_school = #{inSchool}",
                     "and zone_id = '${zoneId}'",
-                    "window w1 as (PARTITION BY userid order by location_time)"
+                    "window w1 as (PARTITION BY userid order by location_time), w2 as (PARTITION BY userid order by location_time desc)"
     })
     List<RemovalLocation> removalLocations(@Param("tableName") String tableName,
                                            @Param("startTime") String startTime,
