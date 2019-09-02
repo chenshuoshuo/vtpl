@@ -59,7 +59,7 @@ flyway:
 #2锐捷上网身份认证
 #3深澜身份认证
 cas:
-  cas-type: 3
+  cas-type: 0
   #城市热点参数
   city-hot:
     udp-port: 61440
@@ -80,7 +80,7 @@ cas:
 #3华三AP定位
 #4华为泛定位
 location:
-  location-type: 4
+  location-type: 0
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166
