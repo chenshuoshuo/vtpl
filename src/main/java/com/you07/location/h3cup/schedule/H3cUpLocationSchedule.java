@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -95,7 +94,8 @@ public class H3cUpLocationSchedule {
                             locationLatest.setInSchool(1);
                             locationLatest.setLocationTime(new Date());
                             locationLatest.setLocationMode("2");
-
+                            //增加校区ID
+                            locationLatest.setZoneId(h3cUpAp.getZoneId());
 
                             locationLatestService.update(locationLatest);
                         }
@@ -123,6 +123,7 @@ public class H3cUpLocationSchedule {
         for(H3cUpAp h3cUpAp : apList){
             if(h3cUpAp.getFloorId() == null || h3cUpAp.getLng() == null || h3cUpAp.getLat() == null){
                 String rommInfo = null;
+                //通过cmgis接口调用获取数据
                 rommInfo = mapService.queryFloorCentroLngLat(h3cUpAp.getCampusName(), h3cUpAp.getBuildingName(), h3cUpAp.getRoomName());
                 if(rommInfo != null){
                     String[] roomInfoArray = rommInfo.split(",");
@@ -130,6 +131,8 @@ public class H3cUpLocationSchedule {
                         h3cUpAp.setFloorId(roomInfoArray[0]);
                         h3cUpAp.setLng(Double.valueOf(roomInfoArray[1]));
                         h3cUpAp.setLat(Double.valueOf(roomInfoArray[2]));
+                        //增加校区信息
+                        h3cUpAp.setZoneId(roomInfoArray[3]);
                         h3cUpApService.update(h3cUpAp);
                     } else{
                         System.out.println(h3cUpAp.getApCode() + ":找不到对应房间");

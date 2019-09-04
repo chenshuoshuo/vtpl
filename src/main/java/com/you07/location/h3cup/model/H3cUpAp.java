@@ -49,6 +49,10 @@ public class H3cUpAp {
      */
     private Integer orderid;
     /**
+     * 校区id
+     **/
+    private String zoneId;
+    /**
      * 备注
      */
     private String memo;
@@ -123,6 +127,14 @@ public class H3cUpAp {
 
     public void setOrderid(Integer orderid) {
         this.orderid = orderid;
+    }
+
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(String zoneId) {
+        this.zoneId = zoneId;
     }
 
     public String getMemo() {

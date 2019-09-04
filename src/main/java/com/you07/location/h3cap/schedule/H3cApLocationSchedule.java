@@ -158,6 +158,8 @@ public class H3cApLocationSchedule implements java.io.Serializable{
     			location.setLocationMode("3");
     			location.setInDoor(view.getInDoor());
     			location.setInSchool(1);
+    			//设置校区ID
+				location.setZoneId(view.getZoneId());
     			location.setLocationTime(new Date());
     			locationLatestService.update(location);
     		}

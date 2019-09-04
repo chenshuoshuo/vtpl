@@ -80,7 +80,7 @@ cas:
 #3华三AP定位
 #4华为泛定位
 location:
-  location-type: 0
+  location-type: 4
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166

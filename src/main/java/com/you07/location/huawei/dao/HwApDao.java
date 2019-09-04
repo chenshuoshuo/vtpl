@@ -29,8 +29,8 @@ public interface HwApDao extends BaseDao<HwAp> {
      * @param lat
      * @param device_mac
      */
-    @Update({"update hw_device_location set lng=#{lng},lat=#{lat} where device_mac=#{device_mac}"})
-    void updataHwAp(@Param("lng") Double lng, @Param("lat") Double lat, @Param("device_mac") String device_mac);
+    @Update({"update hw_device_location set lng=#{lng},lat=#{lat},zone_id=#{zid} where device_mac=#{device_mac}"})
+    void updataHwAp(@Param("lng") Double lng, @Param("lat") Double lat, @Param("device_mac") String device_mac, @Param("zid") String zoneId);
 
     @Select({
             "select * from hw_device_location where device_mac=#{device_mac}"
