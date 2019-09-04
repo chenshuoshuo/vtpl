@@ -13,7 +13,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 				"com.you07.location.h3cap.dao",
 				"com.you07.map.dao",
 		        "com.you07.location.huawei.dao"})
-@EnableSwagger2
 @SpringBootApplication
 @EnableScheduling
 public class VtplApplication {

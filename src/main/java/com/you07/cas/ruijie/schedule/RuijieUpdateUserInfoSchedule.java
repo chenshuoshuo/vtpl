@@ -1,7 +1,7 @@
 package com.you07.cas.ruijie.schedule;
 
 
-import com.you07.client.*;
+import com.you07.cas.ruijie.client.*;
 import com.you07.eas.model.StudentInfo;
 import com.you07.eas.model.TeacherInfo;
 import com.you07.eas.service.StudentInfoService;

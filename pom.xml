@@ -287,6 +287,12 @@
 			<version>1.6.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.osgeo/proj4j -->
 		<dependency>
 			<groupId>org.osgeo</groupId>

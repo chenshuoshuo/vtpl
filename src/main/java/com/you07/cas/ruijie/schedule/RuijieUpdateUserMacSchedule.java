@@ -2,14 +2,12 @@ package com.you07.cas.ruijie.schedule;
 
 
 import com.you07.cas.ruijie.config.RuijieCasConfig;
-import com.you07.client.*;
+import com.you07.cas.ruijie.client.*;
 import com.you07.util.StringUtil;
-import com.you07.vtpl.model.LocationLatest;
 import com.you07.vtpl.service.LocationLatestService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.sql.SQLOutput;
 import java.util.List;
 
 /**

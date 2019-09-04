@@ -99,3 +99,11 @@ location:
   #4华为泛定位
   huawei:
     udp_port: 32180
+
+#请求认证的接口地址
+oauthServer: https://testgis.you07.com/cmccr-server/oauth/token
+#Client-Id
+client_id: cmccr-h5
+client_secret: cmccr-h5
+#获得师生身份信息的接口地址
+ServerEasUrl: https://testgis:you07:com/cmips-server

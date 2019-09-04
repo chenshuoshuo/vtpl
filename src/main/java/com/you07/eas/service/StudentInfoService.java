@@ -5,6 +5,7 @@ import com.you07.config.datasource.annotation.DataSourceConnection;
 import com.you07.eas.dao.StudentInfoDao;
 import com.you07.eas.model.StudentInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +14,18 @@ import java.util.List;
 public class StudentInfoService {
     @Autowired
     private StudentInfoDao studentInfoDao;
+    @Value("${ServerEasUrl}")
+    private String serverEas;
 
-    @DataSourceConnection(DataBaseContextHolder.DataBaseType.POSTGRESEAS)
+
+    //调用接口查询信息的接口
+    public List<StudentInfo> listAll(){
+        return null;
+    }
+    /*@DataSourceConnection(DataBaseContextHolder.DataBaseType.POSTGRESEAS)
     public List<StudentInfo> listAll(){
         return studentInfoDao.listAll();
-    }
+    }*/
 
     @DataSourceConnection(DataBaseContextHolder.DataBaseType.POSTGRESEAS)
     public StudentInfo get(String studentNo){
