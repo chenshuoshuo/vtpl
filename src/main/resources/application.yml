@@ -101,9 +101,11 @@ location:
     udp_port: 32180
 
 #请求认证的接口地址
-oauthServer: https://testgis.you07.com/cmccr-server/oauth/token
-#Client-Id
-client_id: cmccr-h5
-client_secret: cmccr-h5
+oauth:
+  token: https://testgis.you07.com/cmccr-server/oauth/token
+  #Client-Id
+  username: free
+  password: 123456
 #获得师生身份信息的接口地址
-ServerEasUrl: https://testgis:you07:com/cmips-server
+  serverEasUrl: https://testgis:you07:com/cmips-server
+  serverMapUrl:
