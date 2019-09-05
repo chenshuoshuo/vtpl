@@ -50,6 +50,7 @@ public class HwAp {
      * 楼层id
      */
     private String floorid;
+    private String zoneId;
     /**
      * 备注
      */
@@ -133,6 +134,14 @@ public class HwAp {
 
     public void setFloorid(String floorid) {
         this.floorid = floorid;
+    }
+
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(String zoneId) {
+        this.zoneId = zoneId;
     }
 
     public String getMemo() {

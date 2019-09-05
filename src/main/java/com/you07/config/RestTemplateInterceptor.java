@@ -23,6 +23,7 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
 
     public RestTemplateInterceptor(String accessToken) {
         this.accessToken = accessToken;
+        System.out.println(accessToken);
     }
 
     public RestTemplateInterceptor(AccessTokenResponse tokenResponse) {
@@ -36,7 +37,8 @@ public class RestTemplateInterceptor implements ClientHttpRequestInterceptor {
         HttpHeaders headers = request.getHeaders();
 
         // 加入自定义字段
-        headers.add("authorization", accessToken);
+//        headers.add("authorization", "Basic " + accessToken);
+        headers.add("authorization", "Bearer " + accessToken);
 
         // 保证请求继续被执行
         return execution.execute(request, body);

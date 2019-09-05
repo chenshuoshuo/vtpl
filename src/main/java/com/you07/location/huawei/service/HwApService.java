@@ -18,8 +18,8 @@ public class HwApService {
         return hwApDao.selectNewData();
     }
 
-    public void updataHwAp(Double lng, Double lat, String device_mac) {
-        hwApDao.updataHwAp(lng, lat, device_mac);
+    public void updataHwAp(Double lng, Double lat, String device_mac, String zoneId) {
+        hwApDao.updataHwAp(lng, lat, device_mac, zoneId);
     }
     public HwAp selectHwapByMac(String device_mac){
         return hwApDao.selectHwapByMac(device_mac);

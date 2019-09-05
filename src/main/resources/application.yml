@@ -80,7 +80,7 @@ cas:
 #3华三AP定位
 #4华为泛定位
 location:
-  location-type: 0
+  location-type: 4
   #锐捷主动推送定位参数
   ruijie:
     scoket-port: 22166
@@ -107,5 +107,4 @@ oauth:
   username: free
   password: 123456
 #获得师生身份信息的接口地址
-  serverEasUrl: https://testgis:you07:com/cmips-server
-  serverMapUrl:
+  serverEasUrl: https://testgis.you07.com/cmips-server

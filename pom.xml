@@ -33,9 +33,9 @@
 		</dependency>
 		<!-- 锐捷提供的jar包 -->
 		<!--<dependency>-->
-			<!--<groupId>com.ruijie.util</groupId>-->
-			<!--<artifactId>client</artifactId>-->
-			<!--<version>1.0</version>-->
+		<!--<groupId>com.ruijie.util</groupId>-->
+		<!--<artifactId>client</artifactId>-->
+		<!--<version>1.0</version>-->
 		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -287,12 +287,6 @@
 			<version>1.6.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>4.1.0</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/org.osgeo/proj4j -->
 		<dependency>
 			<groupId>org.osgeo</groupId>
@@ -356,6 +350,10 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
+				</configuration>
 			</plugin>
 
 		</plugins>

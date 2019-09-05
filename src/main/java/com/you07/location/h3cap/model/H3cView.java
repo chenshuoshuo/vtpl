@@ -77,6 +77,10 @@ public class H3cView implements java.io.Serializable{
 	@Column(name = "orderid")
 	private Integer orderid;
 	/**
+	 * 校区Id
+	 **/
+	private String zoneId;
+	/**
 	 * 备注
 	 */
 	@Column(name = "memo")
@@ -176,6 +180,14 @@ public class H3cView implements java.io.Serializable{
 
 	public void setOrderid(Integer orderid) {
 		this.orderid = orderid;
+	}
+
+	public String getZoneId() {
+		return zoneId;
+	}
+
+	public void setZoneId(String zoneId) {
+		this.zoneId = zoneId;
 	}
 
 	public String getMemo() {

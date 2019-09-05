@@ -68,7 +68,7 @@ public class MD5FileUtil {
 		return s.equals(md5PwdStr);
 	}
 
-	public static void main(String[] args) throws IOException {
+	/*public static void main(String[] args) throws IOException {
 		long begin = System.currentTimeMillis();
 
 		File big = new File("E:\\jar包\\DataServlet");
@@ -78,6 +78,6 @@ public class MD5FileUtil {
 		System.out.println("md5:" + md5);
 		System.out.println("time:" + ((end - begin) / 1000) + "s");
 
-	}
+	}*/
 
 }

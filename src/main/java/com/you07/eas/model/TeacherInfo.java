@@ -1,12 +1,6 @@
 package com.you07.eas.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -85,6 +79,10 @@ public class TeacherInfo implements java.io.Serializable{
 	 * 学位
 	 */
 	private String xw;
+
+	private String orgCode;
+
+	private String orgName;
 
 	public String getTeachercode() {
 		return teachercode;
@@ -212,5 +210,21 @@ public class TeacherInfo implements java.io.Serializable{
 
 	public void setXw(String xw) {
 		this.xw = xw;
+	}
+	@Transient
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+	@Transient
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
 	}
 }

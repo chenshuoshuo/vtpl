@@ -115,9 +115,9 @@ public class HuaWeiUDPListenerSchedule {
 //                System.out.println("===================");
 //                System.out.println(roomInfoArray);
 //                System.out.println("===================");
-                if (roomInfoArray.length == 3) {
+                if (roomInfoArray.length == 4) {
 //                    System.out.println("start if roomInfoArray.length == 3 ....");
-                    hwApService.updataHwAp(Double.valueOf(roomInfoArray[1]), Double.valueOf(roomInfoArray[2]), hwAp.getDeviceMac());
+                    hwApService.updataHwAp(Double.valueOf(roomInfoArray[1]), Double.valueOf(roomInfoArray[2]), hwAp.getDeviceMac(),hwAp.getZoneId());
                 } else {
                     System.out.println(hwAp.getDeviceMac() + ":找不到对应房间");
                 }
