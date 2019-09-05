@@ -108,5 +108,5 @@ oauth:
   password: 123456
   #获得师生身份信息的接口地址
   serverEasUrl: https://testgis:you07:com/cmips-server
-  #根据校区、楼栋名和房间名获取位置信息的接口
-  serverMapUrl: https://testgis.you07.com/cmgis-server/map/v2/regeo/code
+  #获取地图信息的接口
+  serverMapUrl: https://testgis.you07.com/cmgis-server
