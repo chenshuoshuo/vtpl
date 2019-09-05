@@ -3,6 +3,7 @@ package com.you07.location.huawei.schedule;
 import com.you07.location.huawei.model.HwAp;
 import com.you07.location.huawei.service.HwApService;
 import com.you07.map.service.MapService;
+import com.you07.map.vo.MapInfoVO;
 import com.you07.vtpl.model.LocationLatest;
 import com.you07.vtpl.service.LocationLatestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Date;
 import java.util.List;
@@ -104,23 +104,15 @@ public class HuaWeiUDPListenerSchedule {
         List<HwAp> hwAps = hwApService.selectNewData();
         for (HwAp hwAp : hwAps) {
 //            System.out.println("start for ....");
-            String rommInfo = null;
-            rommInfo = mapService.queryFloorCentroLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
+            MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
 //            System.out.println("===================");
 //            System.out.println(rommInfo);
 //            System.out.println("===================");
-            if (rommInfo != null) {
+            if (mapInfoVO != null) {
 //                System.out.println("start if rommInfo != null ....");
-                String[] roomInfoArray = rommInfo.split(",");
-//                System.out.println("===================");
-//                System.out.println(roomInfoArray);
-//                System.out.println("===================");
-                if (roomInfoArray.length == 4) {
 //                    System.out.println("start if roomInfoArray.length == 3 ....");
-                    hwApService.updataHwAp(Double.valueOf(roomInfoArray[1]), Double.valueOf(roomInfoArray[2]), hwAp.getDeviceMac(),hwAp.getZoneId());
-                } else {
+                    hwApService.updataHwAp(mapInfoVO.getCenter().getX(), mapInfoVO.getCenter().getY(), hwAp.getDeviceMac(),hwAp.getZoneId());
                     System.out.println(hwAp.getDeviceMac() + ":找不到对应房间");
-                }
             } else {
                 System.out.println(hwAp.getDeviceMac() + ":找不到对应房间");
             }

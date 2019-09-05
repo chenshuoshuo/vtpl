@@ -4,6 +4,7 @@ import com.you07.location.h3cup.config.H3cUpConfig;
 import com.you07.location.h3cup.model.H3cUpAp;
 import com.you07.location.h3cup.service.H3cUpApService;
 import com.you07.map.service.MapService;
+import com.you07.map.vo.MapInfoVO;
 import com.you07.vtpl.model.LocationLatest;
 import com.you07.vtpl.service.LocationLatestService;
 import org.apache.commons.httpclient.HttpClient;
@@ -122,21 +123,15 @@ public class H3cUpLocationSchedule {
 
         for(H3cUpAp h3cUpAp : apList){
             if(h3cUpAp.getFloorId() == null || h3cUpAp.getLng() == null || h3cUpAp.getLat() == null){
-                String rommInfo = null;
                 //通过cmgis接口调用获取数据
-                rommInfo = mapService.queryFloorCentroLngLat(h3cUpAp.getCampusName(), h3cUpAp.getBuildingName(), h3cUpAp.getRoomName());
-                if(rommInfo != null){
-                    String[] roomInfoArray = rommInfo.split(",");
-                    if(roomInfoArray.length == 3){
-                        h3cUpAp.setFloorId(roomInfoArray[0]);
-                        h3cUpAp.setLng(Double.valueOf(roomInfoArray[1]));
-                        h3cUpAp.setLat(Double.valueOf(roomInfoArray[2]));
+                MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(h3cUpAp.getCampusName(), h3cUpAp.getBuildingName(), h3cUpAp.getRoomName());
+                if(mapInfoVO != null){
+                        h3cUpAp.setFloorId(mapInfoVO.getLevel());
+                        h3cUpAp.setLng(mapInfoVO.getCenter().getX());
+                        h3cUpAp.setLat(mapInfoVO.getCenter().getY());
                         //增加校区信息
-                        h3cUpAp.setZoneId(roomInfoArray[3]);
+                        h3cUpAp.setZoneId(mapInfoVO.getZoneId());
                         h3cUpApService.update(h3cUpAp);
-                    } else{
-                        System.out.println(h3cUpAp.getApCode() + ":找不到对应房间");
-                    }
                 } else{
                     System.out.println(h3cUpAp.getApCode() + ":找不到对应房间");
                 }
