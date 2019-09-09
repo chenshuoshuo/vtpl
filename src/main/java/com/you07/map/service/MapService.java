@@ -16,9 +16,6 @@ import java.util.Objects;
 @Service
 public class MapService {
 
-    @Value("${oauth.serverMapUrl}")
-    private String mapApiUrl;
-
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
@@ -31,10 +28,10 @@ public class MapService {
      * @param roomName     房间名称
      * @return
      */
-    @DataSourceConnection(DataBaseContextHolder.DataBaseType.POSTGRESGIS)
+    @DataSourceConnection(DataBaseContextHolder.DataBaseType.POSTGRESDEFAULT)
     public MapInfoVO queryFloorCenterLngLat(String campusName, String buildingName, String roomName) {
         try {
-            JSONObject roomInfo = RestTemplateUtil.getJSONObjectForCmGis(mapApiUrl + "/map/v2/regeo/code?buildingName=" + buildingName + "&roomName=" + roomName + "&zoneName=" + campusName);
+            JSONObject roomInfo = RestTemplateUtil.getJSONObjectForCmGis( "/map/v2/regeo/code?buildingName=" + buildingName + "&roomName=" + roomName + "&zoneName=" + campusName);
             JSONObject data = Objects.requireNonNull(roomInfo).getJSONObject("data");
             return objectMapper.readValue(data.toJSONString(), MapInfoVO.class);
         }catch (Exception e) {
