@@ -15,13 +15,12 @@ import java.util.List;
 public class AcademyService {
     @Autowired
     private AcademyDao academyDao;
-    @Value("${oauth.serverEasUrl}")
-    private String getEasurl;
+
 
     //请求Url获得资源
     public List<Academy> queryAll(){
         JSONObject jsonObject = null;
-        jsonObject = RestTemplateUtil.getJSONObjectForCmGis("getEasurl/os/academy/queryAll");
+        jsonObject = RestTemplateUtil.getJSONObjectForCmIps("/os/academy/queryAll");
         List<Academy> academyList = new ArrayList<>();
         int size = jsonObject.size();
         for(int i = 0; i< size; i++) {
