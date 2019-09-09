@@ -18,27 +18,25 @@ import java.util.List;
 public class StudentInfoService {
     @Autowired
     private StudentInfoDao studentInfoDao;
-    @Value("${oauth.serverEasUrl}")
-    private String getEasurl;
 
     public StudentInfo get(String studentNo){
         JSONObject jsonObject = null;
-        jsonObject = RestTemplateUtil.getJSONObjectForCmGis(getEasurl+"/os/studentInfo/get/"+studentNo);
+        jsonObject = RestTemplateUtil.getJSONObjectForCmIps("/os/studentInfo/get/"+studentNo);
         StudentInfo studentInfo = new StudentInfo();
         String name = jsonObject.getJSONObject("data").getString("realName");
         String gender = jsonObject.getJSONObject("data").getString("gender");
         String classCode = jsonObject.getJSONObject("data").getString("classCode");
         //根据学号编号得到班级编号
         JSONObject jsonObject1 = null;
-        jsonObject1 = RestTemplateUtil.getJSONObjectForCmGis(getEasurl+"/os/classInfo/get/"+classCode);
+        jsonObject1 = RestTemplateUtil.getJSONObjectForCmIps("/os/classInfo/get/"+classCode);
         String majorCode = jsonObject1.getJSONObject("data").getString("majorCode");
         //根据专业编号得到院系编号
         JSONObject jsonObject2 = null;
-        jsonObject2 = RestTemplateUtil.getJSONObjectForCmGis(getEasurl+"/os/major/get/"+majorCode);
+        jsonObject2 = RestTemplateUtil.getJSONObjectForCmIps("/os/major/get/"+majorCode);
         String academyCode = jsonObject2.getJSONObject("data").getString("academyCode");
         //根据院系编号得到院系名
         JSONObject jsonObject3 = null;
-        jsonObject3 = RestTemplateUtil.getJSONObjectForCmGis(getEasurl+"/os/academy/get/"+academyCode);
+        jsonObject3 = RestTemplateUtil.getJSONObjectForCmIps("/os/academy/get/"+academyCode);
         String academyName = jsonObject3.getJSONObject("data").getString("academyName");
         studentInfo.setGender(gender);
         studentInfo.setName(name);
