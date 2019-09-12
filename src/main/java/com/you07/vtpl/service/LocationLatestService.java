@@ -1,7 +1,5 @@
 package com.you07.vtpl.service;
 
-import com.you07.eas.dao.StudentInfoDao;
-import com.you07.eas.dao.TeacherInfoDao;
 import com.you07.eas.model.StudentInfo;
 import com.you07.eas.model.TeacherInfo;
 import com.you07.eas.service.StudentInfoService;

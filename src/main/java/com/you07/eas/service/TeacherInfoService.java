@@ -3,7 +3,6 @@ package com.you07.eas.service;
 import com.alibaba.fastjson.JSONObject;
 import com.you07.config.datasource.DataBaseContextHolder;
 import com.you07.config.datasource.annotation.DataSourceConnection;
-import com.you07.eas.dao.TeacherInfoDao;
 import com.you07.eas.model.StudentInfo;
 import com.you07.eas.model.TeacherInfo;
 import com.you07.util.RestTemplateUtil;

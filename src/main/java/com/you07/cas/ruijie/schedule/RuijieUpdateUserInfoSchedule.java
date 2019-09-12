@@ -137,7 +137,6 @@ public class RuijieUpdateUserInfoSchedule implements java.io.Serializable{
 			List<StudentInfo> studentInfoList = studentInfoService.getInSchool(DateUtils.getSchoolYear());
 			for(StudentInfo studentInfo : studentInfoList){
 				LocationLatest locationLatest = new LocationLatest();
-
 				locationLatest.setUserid(studentInfo.getStudentno());
 				locationLatest.setRealname(studentInfo.getName());
 				locationLatest.setGender(studentInfo.getGender());
