@@ -13,6 +13,11 @@ public class RemovalLocation {
     private Double startLat;
     private Double endLng;
     private Double endLat;
+    /**
+     * 坐标系类型
+     * @return
+     */
+    private String type;
 
     public String getUserid() {
         return userid;
@@ -53,5 +58,13 @@ public class RemovalLocation {
 
     public void setStartLat(Double startLat) {
         this.startLat = startLat;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

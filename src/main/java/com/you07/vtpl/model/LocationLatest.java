@@ -79,6 +79,12 @@ public class LocationLatest {
      * */
     private String zoneId;
 
+    /**
+     * 坐标系类型
+     * @return
+     */
+    private String type;
+
 
 
     public String getUserid() {
@@ -207,5 +213,13 @@ public class LocationLatest {
 
     public void setZoneId(String zoneId) {
         this.zoneId = zoneId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

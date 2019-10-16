@@ -73,6 +73,12 @@ public class LocationHistory {
      */
     private String detainedTime;
 
+    /**
+     * 坐标系类型
+     * @return
+     */
+    private String type;
+
     public String getUserid() {
         return userid;
     }
@@ -199,5 +205,13 @@ public class LocationHistory {
 
     public void setZoneId(String zoneId) {
         this.zoneId = zoneId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
