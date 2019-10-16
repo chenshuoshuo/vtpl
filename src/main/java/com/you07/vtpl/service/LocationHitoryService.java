@@ -2,7 +2,9 @@ package com.you07.vtpl.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.you07.util.PositionUtil;
 import com.you07.vtpl.dao.LocationHistoryDao;
+import com.you07.vtpl.model.Gps;
 import com.you07.vtpl.model.LocationHistory;
 import com.you07.vtpl.model.RemovalLocation;
 import io.swagger.models.auth.In;
@@ -179,6 +181,25 @@ public class LocationHitoryService {
 
     public PageInfo<RemovalLocation> removalLocations(String startTime, String endTime, Integer inSchool, Integer zoneId, Integer page, Integer pageSize) throws Exception{
         PageHelper.startPage(page,pageSize);
-        return new PageInfo<RemovalLocation>(locationHistoryDao.removalLocations(data2Table(startTime), startTime, endTime, inSchool, zoneId));
+        List<RemovalLocation> removalLocations = locationHistoryDao.removalLocations(data2Table(startTime), startTime, endTime, inSchool, zoneId);
+        if(removalLocations!=null && removalLocations.size()>0){
+            for (RemovalLocation location:removalLocations) {
+                if(location.getType()!=null && location.getType().equals("GCJ-02")){
+                    if(location.getStartLng()!=null && location.getStartLat()!=null){
+                        Gps startGps = PositionUtil.gcj_To_Gps84(location.getStartLng(), location.getStartLat());
+                        location.setStartLng(startGps.getLon());
+                        location.setStartLat(startGps.getLat());
+                        location.setType("WGS-84");
+                    }
+                    if(location.getEndLng()!=null && location.getEndLat()!=null){
+                        Gps endGps = PositionUtil.gcj_To_Gps84(location.getEndLng(), location.getEndLat());
+                        location.setStartLng(endGps.getLon());
+                        location.setStartLat(endGps.getLat());
+                        location.setType("WGS-84");
+                    }
+                }
+            }
+        }
+        return new PageInfo<RemovalLocation>(removalLocations);
     }
 }
