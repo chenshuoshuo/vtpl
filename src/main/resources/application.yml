@@ -11,12 +11,24 @@ spring:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+  # kafka配置(卓智)
+  kafka:
+#    bootstrap-servers: 61.136.204.140:10000
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      group-id: vtpl
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://211.149.141.72:5432/test_vtp
+    url: jdbc:postgresql://211.149.141.72:5432/test_vtpl
     username: postgres
     password: 6992005Ych
 

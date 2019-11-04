@@ -1,5 +1,7 @@
 package com.you07.vtpl.model;
 
+import com.you07.location.joywise.Message;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -85,6 +87,12 @@ public class LocationLatest {
      */
     private String type;
 
+    public LocationLatest() {
+    }
+
+    public LocationLatest(Message message) {
+        setUserid(message.getUSERID());
+    }
 
 
     public String getUserid() {
