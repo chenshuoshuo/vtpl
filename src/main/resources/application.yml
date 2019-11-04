@@ -16,9 +16,9 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.4.241:5432/vtpl_plus
+    url: jdbc:postgresql://211.149.141.72:5432/test_vtp
     username: postgres
-    password: lqkj007
+    password: 6992005Ych
 
 mybatis:
   configuration:
