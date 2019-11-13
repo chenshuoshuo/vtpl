@@ -34,7 +34,7 @@ public class KafkaSender {
         try {
             String json = objectMapper.writeValueAsString(message);
             logger.info("send" + json);
-            kafkaTemplate.send("zos_user_login_queue", json);
+            kafkaTemplate.send("lqkj_test_queue", json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

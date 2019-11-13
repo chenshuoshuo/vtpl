@@ -1,9 +1,13 @@
 package com.you07;
 
+import com.you07.location.joywise.KafkaSender;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import javax.naming.Context;
 
 @tk.mybatis.spring.annotation.MapperScan(
 		basePackages = {"com.you07.eas.dao",
@@ -17,6 +21,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableScheduling
 public class VtplApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(VtplApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(VtplApplication.class, args);
 	}
 }

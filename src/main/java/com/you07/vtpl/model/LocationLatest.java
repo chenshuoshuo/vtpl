@@ -90,8 +90,13 @@ public class LocationLatest {
     public LocationLatest() {
     }
 
-    public LocationLatest(Message message) {
+    public void updateByMessage(Message message){
+        setRealname(message.getUSERNAME());
         setUserid(message.getUSERID());
+        setAccountMac(message.getUSERMAC());
+        setLocationMode("1");
+        setLocationTime(new Date(message.getLOGINTIME()));
+        setUsrUpdateTime(new Date(System.currentTimeMillis()));
     }
 
 

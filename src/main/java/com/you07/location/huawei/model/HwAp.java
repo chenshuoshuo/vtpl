@@ -1,5 +1,6 @@
 package com.you07.location.huawei.model;
 
+import com.you07.location.joywise.Message;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -55,6 +56,20 @@ public class HwAp {
      * 备注
      */
     private String memo;
+
+    public HwAp(){}
+
+    public HwAp(Message message) {
+        setDeviceMac(message.getAPMAC());
+        setDeviceName("卓智测试设备");
+        setBuilding("图书馆");
+        setCampus("桂花园校区二维");
+        setZoneId("1");
+        setLng(109.49605101987865);
+        setLat(30.29711726281575);
+        setIndoor(1);
+        setFloorid("1");
+    }
 
     public String getDeviceMac() {
         return deviceMac;

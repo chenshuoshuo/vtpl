@@ -1,5 +1,7 @@
 package com.you07.location.joywise;
 
+import io.swagger.models.auth.In;
+
 /**
  * @author Egan
  * @date 2019/11/4 10:40
@@ -16,15 +18,15 @@ public class Message {
 
     private String NASIP;
 
-    private String NASPORT;
+    private Integer NASPORT;
 
     private String WEBGATEWAY;
 
     private String USERGROUPNAME;
 
-    private String ISREPEATAUTH;
+    private Integer ISREPEATAUTH;
 
-    private String LOGINTIME;
+    private Long LOGINTIME;
 
     private String APMAC;
 
@@ -68,11 +70,11 @@ public class Message {
         this.NASIP = NASIP;
     }
 
-    public String getNASPORT() {
+    public Integer getNASPORT() {
         return NASPORT;
     }
 
-    public void setNASPORT(String NASPORT) {
+    public void setNASPORT(Integer NASPORT) {
         this.NASPORT = NASPORT;
     }
 
@@ -92,19 +94,19 @@ public class Message {
         this.USERGROUPNAME = USERGROUPNAME;
     }
 
-    public String getISREPEATAUTH() {
+    public Integer getISREPEATAUTH() {
         return ISREPEATAUTH;
     }
 
-    public void setISREPEATAUTH(String ISREPEATAUTH) {
+    public void setISREPEATAUTH(Integer ISREPEATAUTH) {
         this.ISREPEATAUTH = ISREPEATAUTH;
     }
 
-    public String getLOGINTIME() {
+    public Long getLOGINTIME() {
         return LOGINTIME;
     }
 
-    public void setLOGINTIME(String LOGINTIME) {
+    public void setLOGINTIME(Long LOGINTIME) {
         this.LOGINTIME = LOGINTIME;
     }
 

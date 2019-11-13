@@ -49,8 +49,8 @@ logging:
   level:
     #com.you07.eas.dao: debug
     #com.you07.vtpl.dao: debug
-    com.you07.map.dao: debug
-    com.you07.location.joywise: debug
+    # com.you07.map.dao: debug
+    #com.you07.location.huawei.dao: debug
 
 flyway:
   baseline-on-migrate: true

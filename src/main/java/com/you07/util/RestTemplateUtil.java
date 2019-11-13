@@ -95,6 +95,7 @@ public class RestTemplateUtil {
         if (interceptor != null) {
             restTemplate.setInterceptors(Collections.singletonList(interceptor));
         }
+        System.out.printf(url);
         JSONObject responseJson = restTemplate.getForEntity(url, JSONObject.class).getBody();
         return responseJson;
     }
