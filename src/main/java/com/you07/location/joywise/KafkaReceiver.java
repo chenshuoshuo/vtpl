@@ -73,7 +73,7 @@ public class KafkaReceiver {
                 }
                 generateLocationLatest(hwAp, message);
             } catch (Exception e) {
-                logger.warn( "数据消费失败" + e.getMessage());
+                logger.warn( "数据消费失败," + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -104,14 +104,13 @@ public class KafkaReceiver {
             locationLatest.setOrgCode(teacherInfo.getOrgCode());
             locationLatest.setOrgName(teacherInfo.getOrgName());
         } else {
-            logger.warn("无法识别的用户组:" + message.getUSERGROUPNAME());
-            throw new RuntimeException("无法识别的用户组");
+            throw new RuntimeException("无法识别的用户组:" + message.getUSERGROUPNAME());
         }
 
         MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
         if(mapInfoVO.getCenter() == null)
             throw new RuntimeException("无法获取坐标");
-        locationLatest.setFloorid(hwAp.getFloorid());
+        locationLatest.setFloorid(mapInfoVO.getLevel());
         locationLatest.setLng(mapInfoVO.getCenter().getX());
         locationLatest.setLat(mapInfoVO.getCenter().getY());
         locationLatest.setInSchool(1);
