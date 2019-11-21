@@ -20,7 +20,12 @@ import javax.naming.Context;
 @SpringBootApplication
 @EnableScheduling
 public class VtplApplication {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		ConfigurableApplicationContext context = SpringApplication.run(VtplApplication.class, args);
+//		KafkaSender sender = context.getBean(KafkaSender.class);
+//		for (int i=0; i<3; i++){
+//			sender.send();
+//			Thread.sleep(1000L);
+//		}
 	}
 }

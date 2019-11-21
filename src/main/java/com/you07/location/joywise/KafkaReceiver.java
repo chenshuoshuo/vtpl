@@ -21,7 +21,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.rmi.activation.UnknownGroupException;
 import java.util.Optional;
 
 
@@ -64,7 +63,7 @@ public class KafkaReceiver {
                 Message message = objectMapper.readValue(rawMessage.get().toString(), Message.class);
                 logger.info("receive " + rawMessage.get());
                 if(StringUtils.isBlank(message.getAPMAC()))
-                    throw new RuntimeException("认证识别，数据不存在APMAC");
+                    throw new RuntimeException("无法获取APMAC");
                 HwAp hwAp = hwApDao.selectHwapByMac(message.getAPMAC());
                 //设备不存在
                 if (hwAp == null) {
@@ -73,7 +72,7 @@ public class KafkaReceiver {
                 }
                 generateLocationLatest(hwAp, message);
             } catch (Exception e) {
-                logger.error("数据消费失败:" + rawMessage.get().toString());
+                logger.warn( "数据消费失败" + e.getMessage());
                 e.printStackTrace();
             }
         } else {

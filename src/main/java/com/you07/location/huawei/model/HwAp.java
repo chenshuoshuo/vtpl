@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Calendar;
 
 @Table(name = "hw_device_location")
 public class HwAp {
@@ -60,8 +61,9 @@ public class HwAp {
     public HwAp(){}
 
     public HwAp(Message message) {
+        Calendar.getInstance();
         setDeviceMac(message.getAPMAC());
-        setDeviceName("卓智测试设备");
+        setDeviceName("卓智未识别设备");
         setBuilding("图书馆");
         setCampus("桂花园校区二维");
         setZoneId("1");

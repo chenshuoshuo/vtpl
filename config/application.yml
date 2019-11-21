@@ -14,7 +14,7 @@ spring:
   # kafka配置(卓智)
   kafka:
     bootstrap-servers: 10.200.254.3:9092
-#    bootstrap-servers: 127.0.0.1:9092
+    #    bootstrap-servers: 127.0.0.1:9092
     consumer:
       group-id: vtpl-test
       auto-offset-reset: earliest
@@ -28,9 +28,9 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://211.149.141.72:5432/test_vtpl
-    username: postgres
-    password: 6992005Ych
+    url: jdbc:postgresql://211.67.33.40:5407/vtpl
+    username: hbmz
+    password: hbmz147258!@#
 
 mybatis:
   configuration:
@@ -49,8 +49,8 @@ logging:
   level:
     #com.you07.eas.dao: debug
     #com.you07.vtpl.dao: debug
-    # com.you07.map.dao: debug
-    #com.you07.location.huawei.dao: debug
+    com.you07.map.dao: debug
+    com.you07.location.joywise: debug
 
 flyway:
   baseline-on-migrate: true
@@ -65,10 +65,10 @@ cas:
   #城市热点参数
   city-hot:
     udp-port: 61440
-#锐捷上网身份认证
+  #锐捷上网身份认证
   ruijie:
     ip: '10.18.0.9'
-#深澜身份认证
+  #深澜身份认证
   shenlan:
     udp-port: 48910
 
