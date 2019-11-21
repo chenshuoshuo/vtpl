@@ -10,6 +10,7 @@ import com.you07.eas.service.TeacherInfoService;
 import com.you07.location.huawei.dao.HwApDao;
 import com.you07.location.huawei.model.HwAp;
 import com.you07.map.service.MapService;
+import com.you07.map.vo.MapInfoVO;
 import com.you07.vtpl.dao.LocationLatestDao;
 import com.you07.vtpl.model.LocationLatest;
 import org.apache.commons.lang.StringUtils;
@@ -107,9 +108,12 @@ public class KafkaReceiver {
             throw new RuntimeException("无法识别的用户组");
         }
 
+        MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
+        if(mapInfoVO.getCenter() == null)
+            throw new RuntimeException("无法获取坐标");
         locationLatest.setFloorid(hwAp.getFloorid());
-        locationLatest.setLng(hwAp.getLng());
-        locationLatest.setLat(hwAp.getLat());
+        locationLatest.setLng(mapInfoVO.getCenter().getX());
+        locationLatest.setLat(mapInfoVO.getCenter().getY());
         locationLatest.setInSchool(1);
         locationLatest.setInDoor(hwAp.getIndoor());
 
