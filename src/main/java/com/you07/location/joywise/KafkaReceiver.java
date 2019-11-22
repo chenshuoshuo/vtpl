@@ -73,7 +73,7 @@ public class KafkaReceiver {
                 }
                 generateLocationLatest(hwAp, message);
             } catch (Exception e) {
-                logger.warn( "数据消费失败," + e.getMessage());
+                logger.warn( "数据消费失败", e);
                 e.printStackTrace();
             }
         } else {
@@ -110,11 +110,18 @@ public class KafkaReceiver {
         MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
         if(mapInfoVO.getCenter() == null)
             throw new RuntimeException("无法获取坐标");
-        locationLatest.setFloorid(mapInfoVO.getLevel());
-        locationLatest.setLng(mapInfoVO.getCenter().getX());
-        locationLatest.setLat(mapInfoVO.getCenter().getY());
+        hwAp.setLng(mapInfoVO.getCenter().getX());
+        hwAp.setLat(mapInfoVO.getCenter().getY());
+        hwAp.setFloorid(mapInfoVO.getLevel());
+
+        locationLatest.setFloorid(hwAp.getFloorid());
+        locationLatest.setLng(hwAp.getLng());
+        locationLatest.setLat(hwAp.getLat());
         locationLatest.setInSchool(1);
         locationLatest.setInDoor(hwAp.getIndoor());
+
+
+        hwApDao.updataHwAp(hwAp.getLng(), hwAp.getLat(), hwAp.getDeviceMac(), hwAp.getZoneId());
 
         if(isUpdate)
             locationLatestDao.updateByPrimaryKey(locationLatest) ;

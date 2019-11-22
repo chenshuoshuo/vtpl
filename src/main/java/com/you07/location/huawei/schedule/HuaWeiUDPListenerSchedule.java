@@ -108,13 +108,12 @@ public class HuaWeiUDPListenerSchedule {
 //            System.out.println("===================");
 //            System.out.println(rommInfo);
 //            System.out.println("===================");
-            if (mapInfoVO != null) {
+            if (mapInfoVO != null && mapInfoVO.getCenter() != null) {
 //                System.out.println("start if rommInfo != null ....");
 //                    System.out.println("start if roomInfoArray.length == 3 ....");
                     hwApService.updataHwAp(mapInfoVO.getCenter().getX(), mapInfoVO.getCenter().getY(), hwAp.getDeviceMac(),hwAp.getZoneId());
-                    System.out.println(hwAp.getDeviceMac() + ":找不到对应房间");
             } else {
-                System.out.println(hwAp.getDeviceMac() + ":找不到对应房间");
+                throw new RuntimeException("can't find the room");
             }
         }
 

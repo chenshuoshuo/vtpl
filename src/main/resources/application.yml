@@ -14,7 +14,6 @@ spring:
   # kafka配置(卓智)
   kafka:
     bootstrap-servers: 10.200.254.3:9092
-#    bootstrap-servers: 127.0.0.1:9092
     consumer:
       group-id: vtpl-test
       auto-offset-reset: earliest
