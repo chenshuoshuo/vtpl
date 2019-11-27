@@ -1,5 +1,7 @@
 package com.you07.vtpl.model;
 
+import com.you07.eas.vo.AcademyVO;
+import com.you07.eas.vo.StudentVO;
 import com.you07.location.joywise.Message;
 
 import javax.persistence.Column;
@@ -234,5 +236,14 @@ public class LocationLatest {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setStudent(StudentVO studentVO) {
+        setRealname(studentVO.getRealName());
+    }
+
+    public void setOrgs(AcademyVO academyVO) {
+        setOrgName(academyVO.getAcademyName());
+        setOrgCode(academyVO.getAcademyCode());
     }
 }

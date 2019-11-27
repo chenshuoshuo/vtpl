@@ -114,3 +114,6 @@ oauth:
 #  serverEasUrl: https://testgis:you07:com/cmips-server
 #  #获取地图信息的接口
 #  serverMapUrl: https://testgis.you07.com/cmgis-server
+joywise:
+  topics:
+    - zos_user_login_queue

@@ -1,20 +1,26 @@
 package com.you07.eas.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.you07.config.datasource.DataBaseContextHolder;
 import com.you07.config.datasource.annotation.DataSourceConnection;
 import com.you07.eas.model.Academy;
 import com.you07.eas.model.Result;
 import com.you07.eas.model.StudentInfo;
+import com.you07.eas.vo.AcademyVO;
+import com.you07.eas.vo.ClassVO;
+import com.you07.eas.vo.MajorVO;
+import com.you07.eas.vo.StudentVO;
 import com.you07.util.RestTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class StudentInfoService {
@@ -75,5 +81,39 @@ public class StudentInfoService {
             studentInfoList.add(studentInfo1);
         }
         return studentInfoList;
+    }
+
+
+    public List<StudentVO> getStudentList(Integer size) throws IOException {
+        String json = RestTemplateUtil.getJSONObjectForCmIps("/os/studentInfo/pageQuery?page=1&pageSize="+size).getJSONObject("data").getJSONArray("content").toJSONString();
+        return JSONArray.parseArray(json, StudentVO.class);
+    }
+
+    public Map<String, MajorVO> getMajorMap(){
+        String json = RestTemplateUtil.getJSONObjectForCmIps("/os/major/queryAll/").getJSONArray("data").toJSONString();
+        Map<String, MajorVO> map = new HashMap<>();
+        for(MajorVO majorVO : JSONArray.parseArray(json, MajorVO.class)){
+            map.put(majorVO.getMajorCode(), majorVO);
+        }
+        return map;
+    }
+
+    public Map<String, AcademyVO> getAcademyMap(){
+        String json = RestTemplateUtil.getJSONObjectForCmIps("/os/academy/queryAll").getJSONArray("data").toJSONString();
+        Map<String, AcademyVO> map = new HashMap<>();
+        for(AcademyVO academyVO : JSONArray.parseArray(json, AcademyVO.class)){
+            map.put(academyVO.getAcademyCode(), academyVO);
+        }
+        return map;
+    }
+
+    public Map<String, ClassVO> getClassMap() {
+
+        String json = RestTemplateUtil.getJSONObjectForCmIps("/os/classInfo/queryAll").getJSONArray("data").toJSONString();
+        Map<String, ClassVO> map = new HashMap<>();
+        for(ClassVO classVO : JSONArray.parseArray(json, ClassVO.class)){
+            map.put(classVO.getClassCode(), classVO);
+        }
+        return map;
     }
 }
