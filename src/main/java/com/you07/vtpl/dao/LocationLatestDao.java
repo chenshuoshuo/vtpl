@@ -2,6 +2,7 @@ package com.you07.vtpl.dao;
 
 import com.you07.common.BaseDao;
 import com.you07.vtpl.model.LocationLatest;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -65,4 +66,16 @@ public interface LocationLatestDao extends BaseDao<LocationLatest>{
     })
     int invalidAccountId(@Param("accountId") String accountId,
                    @Param("userid") String userid);
+
+    @Delete("delete from location_latest where account_mac = 'vtpl-test-data' ")
+    void clearTestData();
+
+    @Delete("delete from location_history_year where account_mac = 'vtpl-test-data' ")
+    void clearTestYearData();
+
+    @Delete("delete from location_history_month where account_mac = 'vtpl-test-data' ")
+    void clearTestMonthData();
+
+    @Delete("delete from location_history_day where account_mac = 'vtpl-test-data' ")
+    void clearTestDayData();
 }

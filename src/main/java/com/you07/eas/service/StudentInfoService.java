@@ -85,7 +85,7 @@ public class StudentInfoService {
 
 
     public List<StudentVO> getStudentList(Integer size) throws IOException {
-        String json = RestTemplateUtil.getJSONObjectForCmIps("/os/studentInfo/pageQuery?page=1&pageSize="+size).getJSONObject("data").getJSONArray("content").toJSONString();
+        String json = RestTemplateUtil.getJSONObjectForCmIps("/os/studentInfo/pageQuery?page=0&pageSize="+size).getJSONObject("data").getJSONArray("content").toJSONString();
         return JSONArray.parseArray(json, StudentVO.class);
     }
 

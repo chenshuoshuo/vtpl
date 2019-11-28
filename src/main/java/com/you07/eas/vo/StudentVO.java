@@ -15,6 +15,8 @@ public class StudentVO {
 
     private String className;
 
+    private String gender;
+
     public String getStudentNo() {
         return studentNo;
     }
@@ -45,5 +47,13 @@ public class StudentVO {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

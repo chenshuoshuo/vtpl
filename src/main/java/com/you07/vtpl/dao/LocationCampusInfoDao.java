@@ -23,5 +23,5 @@ public interface LocationCampusInfoDao extends BaseDao<LocationCampusInfo>{
     @Select({
             "select * from location_campus_info where school_id = #{schoolId} and is_default = 1"
     })
-    LocationCampusInfo loadDefaultCampus(@Param("schoolId") String schoolId);
+    LocationCampusInfo loadDefaultCampus(@Param("schoolId") Integer schoolId);
 }

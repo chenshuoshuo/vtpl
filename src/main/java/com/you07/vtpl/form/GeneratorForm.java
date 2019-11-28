@@ -1,6 +1,8 @@
 package com.you07.vtpl.form;
 
-import java.util.Date;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author egan
@@ -9,25 +11,28 @@ import java.util.Date;
  */
 public class GeneratorForm {
 
+    @NotNull
     private Integer size;
 
-    private String campusId;
+    @NotNull
+    private Integer campusId;
 
-    private Date locationTime;
+    @NotBlank
+    private String locationTime;
 
-    public Date getLocationTime() {
+    public String getLocationTime() {
         return locationTime;
     }
 
-    public void setLocationTime(Date locationTime) {
+    public void setLocationTime(String locationTime) {
         this.locationTime = locationTime;
     }
 
-    public String getCampusId() {
+    public Integer getCampusId() {
         return campusId;
     }
 
-    public void setCampusId(String campusId) {
+    public void setCampusId(Integer campusId) {
         this.campusId = campusId;
     }
 
