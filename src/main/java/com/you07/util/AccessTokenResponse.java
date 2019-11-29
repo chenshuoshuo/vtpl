@@ -7,6 +7,7 @@ package com.you07.util;
  */
 public class AccessTokenResponse {
 
+
     private String access_token;
 
     private String token_type;
@@ -18,6 +19,8 @@ public class AccessTokenResponse {
     private String jti;
 
     private String scope;
+
+    private Long tokenTime;
 
     public String getExpires_in() {
         return expires_in;
@@ -66,4 +69,13 @@ public class AccessTokenResponse {
     public void setToken_type(String token_type) {
         this.token_type = token_type;
     }
+
+    public Long getTokenTime() {
+        return tokenTime;
+    }
+
+    public void setTokenTime(Long tokenTime) {
+        this.tokenTime = tokenTime;
+    }
+
 }
