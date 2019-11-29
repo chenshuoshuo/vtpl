@@ -5,6 +5,7 @@ server:
     worker-threads: 32
     buffer-size: 2048
     direct-buffers: true
+  context-path: /vtpl
 
 spring:
   mvc:
@@ -71,15 +72,13 @@ cas:
   shenlan:
     udp-port: 48910
 
-
-
-
 #定位系统：
 #0不对接定位
 #1锐捷主动推送
 #2华三泛定位
 #3华三AP定位
 #4华为泛定位
+
 location:
   location-type: 4
   #锐捷主动推送定位参数
@@ -101,19 +100,16 @@ location:
   huawei:
     udp_port: 32180
 
+#一卡通定时器执行频率
+ecard:
+  cron: 0/5 * * * * *
+
 #请求认证的接口地址
 oauth:
   client-id: cmccr-guest
   client-secret: cmccr-guest
   grant-type: client_credentials
   token: https://gis.hbmzu.edu.cn/cmccr-server/oauth/token
-#  #Client-Id
-#  username: free
-#  password: 123456
-#  #获得师生身份信息的接口地址
-#  serverEasUrl: https://testgis:you07:com/cmips-server
-#  #获取地图信息的接口
-#  serverMapUrl: https://testgis.you07.com/cmgis-server
 joywise:
   topics:
     - zos_user_login_queue

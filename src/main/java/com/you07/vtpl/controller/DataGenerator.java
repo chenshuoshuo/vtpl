@@ -57,8 +57,8 @@ public class DataGenerator {
 
         List<StudentVO> students = studentInfoService.getStudentList(form.getSize());
         Map<String, ClassVO> classMap = studentInfoService.getClassMap();
-//        Map<String, MajorVO> majorMap = studentInfoService.getMajorMap();
-//        Map<String, AcademyVO> academyMap = studentInfoService.getAcademyMap();
+        Map<String, MajorVO> majorMap = studentInfoService.getMajorMap();
+        Map<String, AcademyVO> academyMap = studentInfoService.getAcademyMap();
 
         List<Point2D.Double> polygon = CoordinateUtil.convertStrToList(campus.getCoordinates());
         Double maxX = polygon.stream().map(Point2D.Double::getX).max(Double::compareTo).get();
@@ -74,21 +74,21 @@ public class DataGenerator {
 
             Point2D.Double coordinate = new Point2D.Double(x,y);
 
-//            ClassVO classVO = classMap.get(studentVO.getClassCode());
-//            if(classVO == null)
-//                throw new NullPointerException("班级不存在");
-//            MajorVO majorVO = majorMap.get(classVO.getClassCode());
-//            if(majorVO == null)
-//                throw new NullPointerException("专业不存在");
-//            AcademyVO academyVO = academyMap.get(majorVO.getAcademyCode());
-//            if(academyVO == null)
-//                throw new NullPointerException("院系不存在");
+            ClassVO classVO = classMap.get(studentVO.getClassCode());
+            if(classVO == null)
+                continue;
+            MajorVO majorVO = majorMap.get(classVO.getClassCode());
+            if(majorVO == null)
+                continue;
+            AcademyVO academyVO = academyMap.get(majorVO.getAcademyCode());
+            if(academyVO == null)
+                continue;
 
             LocationLatest locationLatest = new LocationLatest();
             locationLatest.setUserid(studentVO.getStudentNo());
             locationLatest.setRealname(studentVO.getRealName());
             locationLatest.setGender(studentVO.getGender());
-//            locationLatest.setOrgs(academyVO);
+            locationLatest.setOrgs(academyVO);
             locationLatest.setLng(coordinate.x);
             locationLatest.setLat(coordinate.y);
             locationLatest.setFloorid("1");

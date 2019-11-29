@@ -80,7 +80,6 @@ public class LocationSchedule {
                 System.out.println("start huawei-location");
                 huaWeiUDPListenerSchedule.setUdpPort(huaWeiConfig.getUdpPort());
                 huaWeiUDPListenerSchedule.startJob();
-
             }
 
             default:
