@@ -63,7 +63,7 @@ public class KafkaReceiver {
             try {
                 Message message = objectMapper.readValue(rawMessage.get().toString(), Message.class);
                 logger.info("receive " + rawMessage.get());
-                if(StringUtils.isBlank(message.getAPMAC()))
+                if (StringUtils.isBlank(message.getAPMAC()))
                     throw new RuntimeException("无法获取APMAC");
                 HwAp hwAp = hwApDao.selectHwapByMac(message.getAPMAC());
                 //设备不存在
@@ -73,7 +73,7 @@ public class KafkaReceiver {
                 }
                 generateLocationLatest(hwAp, message);
             } catch (Exception e) {
-                logger.warn( "数据消费失败", e);
+                logger.warn("数据消费失败", e);
                 e.printStackTrace();
             }
         } else {
@@ -82,51 +82,36 @@ public class KafkaReceiver {
     }
 
     private void generateLocationLatest(HwAp hwAp, Message message) {
-        boolean isUpdate = true;
-        LocationLatest locationLatest = locationLatestDao.selectByPrimaryKey(message.getUSERID());
-        if (locationLatest == null) {
-            locationLatest = new LocationLatest();
-            isUpdate = false;
-        }
-        locationLatest.updateByMessage(message);
 
-        locationLatest.setUserid(message.getUSERID());
+        LocationLatest locationLatest = null;
+
         if ("学生".equals(message.getUSERGROUPNAME())) {
             StudentInfo studentInfo = studentInfoService.get(message.getUSERID());
-            locationLatest.setRealname(studentInfo.getName());
-            locationLatest.setGender(studentInfo.getGender());
-            locationLatest.setOrgCode(studentInfo.getOrgCode());
-            locationLatest.setOrgName(studentInfo.getOrgName());
+            locationLatest = new LocationLatest(studentInfo);
         } else if ("老师".equals(message.getUSERGROUPNAME())) {
             TeacherInfo teacherInfo = teacherInfoService.get(message.getUSERID());
-            locationLatest.setRealname(teacherInfo.getName());
-            locationLatest.setGender(teacherInfo.getGender());
-            locationLatest.setOrgCode(teacherInfo.getOrgCode());
-            locationLatest.setOrgName(teacherInfo.getOrgName());
+            locationLatest = new LocationLatest(teacherInfo);
         } else {
             throw new RuntimeException("无法识别的用户组:" + message.getUSERGROUPNAME());
         }
 
-        MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
-        if(mapInfoVO.getCenter() == null)
-            throw new RuntimeException("无法获取坐标");
-        hwAp.setLng(mapInfoVO.getCenter().getX());
-        hwAp.setLat(mapInfoVO.getCenter().getY());
-        hwAp.setFloorid(mapInfoVO.getLevel());
+        if(hwAp.getLng() == null || hwAp.getLat() == null){
+            MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
+            if (mapInfoVO.getCenter() == null)
+                throw new RuntimeException("无法获取AP设备坐标");
+            hwAp.setLng(mapInfoVO.getCenter().getX());
+            hwAp.setLat(mapInfoVO.getCenter().getY());
+            hwAp.setFloorid(mapInfoVO.getLevel());
+            hwApDao.updataHwAp(hwAp.getLng(), hwAp.getLat(), hwAp.getDeviceMac(), hwAp.getZoneId());
+        }
 
         locationLatest.setFloorid(hwAp.getFloorid());
         locationLatest.setLng(hwAp.getLng());
         locationLatest.setLat(hwAp.getLat());
         locationLatest.setInSchool(1);
         locationLatest.setInDoor(hwAp.getIndoor());
-
-
-        hwApDao.updataHwAp(hwAp.getLng(), hwAp.getLat(), hwAp.getDeviceMac(), hwAp.getZoneId());
-
-        if(isUpdate)
-            locationLatestDao.updateByPrimaryKey(locationLatest) ;
-        else
-            locationLatestDao.insertSelective(locationLatest);
+        locationLatestDao.deleteByPrimaryKey(locationLatest.getUserid());
+        locationLatestDao.insertSelective(locationLatest);
     }
 
 

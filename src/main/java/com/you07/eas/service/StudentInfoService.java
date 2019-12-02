@@ -25,29 +25,20 @@ import java.util.*;
 @Service
 public class StudentInfoService {
     public StudentInfo get(String studentNo){
-        JSONObject jsonObject = null;
-        jsonObject = RestTemplateUtil.getJSONObjectForCmIps("/os/studentInfo/get/"+studentNo);
-        StudentInfo studentInfo = new StudentInfo();
-        String name = jsonObject.getJSONObject("data").getString("realName");
-        String gender = jsonObject.getJSONObject("data").getString("gender");
-        String classCode = jsonObject.getJSONObject("data").getString("classCode");
+        JSONObject studentJson = RestTemplateUtil.getJSONObjectForCmIps("/os/studentInfo/get/"+studentNo);
+
+        StudentVO studentVO = studentJson.getObject("data", StudentVO.class);
         //根据学号编号得到班级编号
-        JSONObject jsonObject1 = null;
-        jsonObject1 = RestTemplateUtil.getJSONObjectForCmIps("/os/classInfo/get/"+classCode);
-        String majorCode = jsonObject1.getJSONObject("data").getString("majorCode");
+        JSONObject classJson = RestTemplateUtil.getJSONObjectForCmIps("/os/classInfo/get/"+studentVO.getClassCode());
+        ClassVO classVO = classJson.getObject("data", ClassVO.class);
         //根据专业编号得到院系编号
-        JSONObject jsonObject2 = null;
-        jsonObject2 = RestTemplateUtil.getJSONObjectForCmIps("/os/major/get/"+majorCode);
-        String academyCode = jsonObject2.getJSONObject("data").getString("academyCode");
+        JSONObject majorJson = RestTemplateUtil.getJSONObjectForCmIps("/os/major/get/"+classVO.getMajorCode());
+        MajorVO majorVO = majorJson.getObject("data", MajorVO.class);
         //根据院系编号得到院系名
-        JSONObject jsonObject3 = null;
-        jsonObject3 = RestTemplateUtil.getJSONObjectForCmIps("/os/academy/get/"+academyCode);
-        String academyName = jsonObject3.getJSONObject("data").getString("academyName");
-        studentInfo.setGender(gender);
-        studentInfo.setName(name);
-        studentInfo.setOrgCode(academyCode);
-        studentInfo.setOrgName(academyName);
-        return studentInfo;
+        JSONObject academyJson = RestTemplateUtil.getJSONObjectForCmIps("/os/academy/get/"+majorVO.getAcademyCode());
+        AcademyVO academyVO = academyJson.getObject("data", AcademyVO.class);
+
+        return new StudentInfo(studentVO, academyVO);
     }
 
     public List<StudentInfo> getInSchool(Integer schoolYear){
@@ -62,6 +53,7 @@ public class StudentInfoService {
             map = (Map<String, Object>) studentInfoList1.get(i);
             studentInfo1.setName((String) map.get("realName"));
             studentInfo1.setGender((String) map.get("gender"));
+            studentInfo1.setTel((String)map.get("tel"));
             String classCode = (String) map.get("classCode");
             //根据班级号查询机构
             //根据学号编号得到班级编号

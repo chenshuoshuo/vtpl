@@ -1,8 +1,9 @@
 package com.you07.vtpl.model;
 
+import com.you07.eas.model.StudentInfo;
+import com.you07.eas.model.TeacherInfo;
 import com.you07.eas.vo.AcademyVO;
 import com.you07.eas.vo.StudentVO;
-import com.you07.location.joywise.Message;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 /**
  * 用户最新位置信息
+ *
  * @author RY
  * @since 2018-8-8 15:48:49
  */
@@ -80,27 +82,32 @@ public class LocationLatest {
     private Integer inSchool;
     /**
      * 校区ID
-     * */
-    private String zoneId;
-
-    /**
-     * 坐标系类型
-     * @return
      */
-    private String type;
+    private String zoneId;
+    /**
+     * 电话号码
+     */
+    private String telephone;
 
     public LocationLatest() {
     }
 
-    public void updateByMessage(Message message){
-        setRealname(message.getUSERNAME());
-        setUserid(message.getUSERID());
-        setAccountMac(message.getUSERMAC());
-        setLocationMode("1");
-        setLocationTime(new Date(message.getLOGINTIME()));
-        setUsrUpdateTime(new Date(System.currentTimeMillis()));
+    public LocationLatest(StudentVO studentVO, AcademyVO academyVO) {
+        setUserid(studentVO.getStudentNo());
+        setGender(studentVO.getGender());
+        setRealname(studentVO.getRealName());
+        setTelephone(studentVO.getTelephone());
+        setOrgCode(academyVO.getAcademyCode());
+        setOrgName(academyVO.getAcademyName());
     }
 
+    public LocationLatest(StudentInfo studentInfo) {
+
+    }
+
+    public LocationLatest(TeacherInfo teacherInfo) {
+
+    }
 
     public String getUserid() {
         return userid;
@@ -230,20 +237,11 @@ public class LocationLatest {
         this.zoneId = zoneId;
     }
 
-    public String getType() {
-        return type;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setStudent(StudentVO studentVO) {
-        setRealname(studentVO.getRealName());
-    }
-
-    public void setOrgs(AcademyVO academyVO) {
-        setOrgName(academyVO.getAcademyName());
-        setOrgCode(academyVO.getAcademyCode());
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 }

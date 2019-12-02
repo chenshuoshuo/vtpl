@@ -1,5 +1,6 @@
 package com.you07.vtpl.form;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -11,14 +12,18 @@ import javax.validation.constraints.NotNull;
  */
 public class GeneratorForm {
 
+    @ApiModelProperty("生成人数")
     @NotNull
     private Integer size;
 
+    @ApiModelProperty("校区id")
     @NotNull
     private Integer campusId;
 
+    @ApiModelProperty("定位时间，如:2019-01-01 00:00:00")
     @NotBlank
     private String locationTime;
+
 
     public String getLocationTime() {
         return locationTime;

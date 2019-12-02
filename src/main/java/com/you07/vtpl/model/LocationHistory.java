@@ -67,17 +67,15 @@ public class LocationHistory {
      * 校区ID
      */
     private String zoneId;
+    /**
+     * 电话号码
+     */
+    private String telephone;
 
     /**
      * 停留时间
      */
     private String detainedTime;
-
-    /**
-     * 坐标系类型
-     * @return
-     */
-    private String type;
 
     public String getUserid() {
         return userid;
@@ -207,11 +205,11 @@ public class LocationHistory {
         this.zoneId = zoneId;
     }
 
-    public String getType() {
-        return type;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 }

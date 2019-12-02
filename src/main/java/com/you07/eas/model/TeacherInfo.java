@@ -3,6 +3,8 @@ package com.you07.eas.model;
 import javax.persistence.*;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.you07.eas.vo.OrgVO;
+import com.you07.eas.vo.TeacherVO;
 
 /**
  * 教职工信息
@@ -83,6 +85,18 @@ public class TeacherInfo implements java.io.Serializable{
 	private String orgCode;
 
 	private String orgName;
+
+	public TeacherInfo() {
+	}
+
+	public TeacherInfo(TeacherVO teacherVO, OrgVO orgVO) {
+		setTeachercode(teacherVO.getStaffNumber());
+		setTel(teacherVO.getMobile());
+		setGender(teacherVO.getGender());
+		setName(teacherVO.getRealName());
+		setOrgCode(orgVO.getOrganizationCode());
+		setOrgName(orgVO.getOrganizationName());
+	}
 
 	public String getTeachercode() {
 		return teachercode;

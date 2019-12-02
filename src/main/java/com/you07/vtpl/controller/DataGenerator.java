@@ -84,11 +84,7 @@ public class DataGenerator {
             if(academyVO == null)
                 continue;
 
-            LocationLatest locationLatest = new LocationLatest();
-            locationLatest.setUserid(studentVO.getStudentNo());
-            locationLatest.setRealname(studentVO.getRealName());
-            locationLatest.setGender(studentVO.getGender());
-            locationLatest.setOrgs(academyVO);
+            LocationLatest locationLatest = new LocationLatest(studentVO, academyVO);
             locationLatest.setLng(coordinate.x);
             locationLatest.setLat(coordinate.y);
             locationLatest.setFloorid("1");
@@ -97,8 +93,6 @@ public class DataGenerator {
             locationLatest.setZoneId(String.valueOf(form.getCampusId()));
             locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
             locationLatest.setLocationTime(date);
-
-
             if (CoordinateUtil.isInPolygon(coordinate, polygon)) {
                 locationLatest.setInSchool(1);
             } else {

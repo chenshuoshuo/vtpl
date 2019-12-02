@@ -1,5 +1,8 @@
 package com.you07.eas.model;
 
+import com.you07.eas.vo.AcademyVO;
+import com.you07.eas.vo.StudentVO;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -73,6 +76,18 @@ public class StudentInfo{
 	private String orgCode;
 
 	private String orgName;
+
+	public StudentInfo() {
+	}
+
+	public StudentInfo(StudentVO studentVO, AcademyVO academyVO) {
+		setStudentno(studentVO.getStudentNo());
+		setGender(studentVO.getGender());
+		setName(studentVO.getRealName());
+		setTel(studentVO.getTelephone());
+		setOrgCode(academyVO.getAcademyCode());
+		setOrgName(academyVO.getAcademyName());
+	}
 
 	public String getStudentno() {
 		return studentno;
