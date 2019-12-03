@@ -40,9 +40,10 @@ CREATE OR REPLACE FUNCTION public.update_location_info()
       _location_mode VARCHAR(50):=null;
       _zone_id VARCHAR(64):=null;
       _type VARCHAR(64):=null;
+      _telephone VARCHAR(64):=null;
     begin
-      select NEW.userid, NEW.realname, NEW.gender, NEW.account_mac, NEW.org_code, NEW.org_name, NEW.lng, NEW.lat, NEW.floorid, NEW.location_time, NEW.in_door, NEW.in_school, NEW.usr_update_time, NEW.location_mode ,NEW.zone_id ,NEW.type into
-           _userid, _realname, _gender, _account_mac, _org_code, _org_name, _lng, _lat, _floorid, _location_time, _in_door, _in_school, _usr_update_time, _location_mode, _zone_id, _type;
+      select NEW.userid, NEW.realname, NEW.gender, NEW.account_mac, NEW.org_code, NEW.org_name, NEW.lng, NEW.lat, NEW.floorid, NEW.location_time, NEW.in_door, NEW.in_school, NEW.usr_update_time, NEW.location_mode ,NEW.zone_id ,NEW.type,NEW.telephone into
+           _userid, _realname, _gender, _account_mac, _org_code, _org_name, _lng, _lat, _floorid, _location_time, _in_door, _in_school, _usr_update_time, _location_mode, _zone_id, _type, _telephone;
 
       if _lng is not null and _lat is not null and _location_time is not null then
         --原始数据分表存储
@@ -65,7 +66,8 @@ CREATE OR REPLACE FUNCTION public.update_location_info()
             usr_update_time      TIMESTAMP            null,
             location_mode        VARCHAR(50)          null,
             zone_id              VARCHAR(64)          null,
-            type                 VARCHAR(64)          null
+            type                 VARCHAR(64)          null,
+            telephone            VARCHAR(64)          null
             );
 
             create  index Index_' || _table_name || '_org_code on ' || _table_name || ' (
@@ -91,7 +93,7 @@ CREATE OR REPLACE FUNCTION public.update_location_info()
            execute _sql;
         end if;
 
-        _insert_sql_temp = 'insert into INSERT_TABLE_NAME (userid, realname, gender, account_mac, org_code, org_name, lng, lat, floorid, location_time, in_door, in_school, zone_id, type, usr_update_time, location_mode) values ('
+        _insert_sql_temp = 'insert into INSERT_TABLE_NAME (userid, realname, gender, account_mac, org_code, org_name, lng, lat, floorid, location_time, in_door, in_school, zone_id, type, usr_update_time, location_mode, telephone) values ('
           || (case when _userid is null then 'null' else '''' || _userid || '''' end) || ', '
           || (case when _realname is null then 'null' else '''' || _realname || '''' end) || ', '
           || (case when _gender is null then 'null' else '''' || _gender || '''' end) || ', '
@@ -107,8 +109,8 @@ CREATE OR REPLACE FUNCTION public.update_location_info()
           || (case when _zone_id is null then 'null' else '''' || _zone_id || '''' end) || ', '
           || (case when _type is null then 'null' else '''' || _type || '''' end) || ', '
           || (case when _usr_update_time is null then 'null' else '''' || _usr_update_time || '''' end) || ', ';
-
-          _insert_sql_temp = _insert_sql_temp || (case when _location_mode is null then 'null' else '''' || _location_mode || '''' end) || ')';
+          _insert_sql_temp = _insert_sql_temp || (case when _location_mode is null then 'null' else '''' || _location_mode || '''' end) || ', '
+          || (case when _telephone is null then 'null' else '''' || _telephone || '''' end) || ')';
         raise notice 'insert_sql_temp:%', _insert_sql_temp;
 
         --检查是否存在该用户相同时间的定位信息

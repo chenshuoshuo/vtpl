@@ -102,7 +102,6 @@ public class DataGenerator {
             locationLatestDao.insert(locationLatest);
         }
 
-
         return new MessageBean();
     }
 
