@@ -244,4 +244,18 @@ public class LocationLatest {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
+
+    public void setDataByStudentInfo(StudentInfo studentInfo) {
+        setRealname(studentInfo.getName());
+        setGender(studentInfo.getGender());
+        setOrgCode(studentInfo.getOrgCode());
+        setOrgName(studentInfo.getOrgName());
+    }
+
+    public void setDataByTeacherInfo(TeacherInfo teacherInfo) {
+        setRealname(teacherInfo.getName());
+        setGender(teacherInfo.getGender());
+        setOrgCode(teacherInfo.getOrgCode());
+        setOrgName(teacherInfo.getOrgName());
+    }
 }

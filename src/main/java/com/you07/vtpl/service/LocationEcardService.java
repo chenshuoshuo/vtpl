@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.acl.LastOwnerException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,57 +56,59 @@ public class LocationEcardService {
      **/
     @Transactional
     public synchronized void saveEcardRecord() {
-        List<LocationEcardUseRecord> records = locationEcardUseRecordDao.selectAll();
-        for (LocationEcardUseRecord r : records) {
-            LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
-            LocationLatest locationLatest = new LocationLatest();
-            if (device == null) {
-                device = new LocationEcardDevice();
-                device.setDeviceCode(r.getDeviceCode());
-                device.setDeviceName("未识别设备");
-            }
-            if (device.getDeviceLat() == null || device.getDeviceLng() == null || device.getGisLeaf() == null) {
-                MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
+        //每次限制存一万条
+        List<LocationEcardUseRecord> records = locationEcardUseRecordDao.selectEcardList(10000);
+        //如果有数据，转换成location_latest
+        while(records.size()>0){
+            List<LocationLatest> locationLatests = new ArrayList<>();
+            for (LocationEcardUseRecord r : records) {
+                LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
+                LocationLatest locationLatest = new LocationLatest();
+                if (device == null) {
+                    device = new LocationEcardDevice();
+                    device.setDeviceCode(r.getDeviceCode());
+                    device.setDeviceName("未识别设备");
+                }
+                if (device.getDeviceLat() == null || device.getDeviceLng() == null || device.getGisLeaf() == null) {
+                    MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
+                    try {
+                        locationLatest.setZoneId(mapInfoVO.getZoneId());
+                        //如果无法获取到经纬度，跳过该记录
+                        device.setDeviceLat(mapInfoVO.getCenter().getX());
+                        device.setDeviceLng(mapInfoVO.getCenter().getX());
+                        device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
+                        locationEcardDeviceDao.updateByPrimaryKey(device);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+                }
+
+                locationLatest.setUserid(r.getUserCode());
                 try {
-                    locationLatest.setZoneId(mapInfoVO.getZoneId());
-                    //如果无法获取到经纬度，跳过该记录
-                    device.setDeviceLat(mapInfoVO.getCenter().getX());
-                    device.setDeviceLng(mapInfoVO.getCenter().getX());
-                    device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
-                    locationEcardDeviceDao.updateByPrimaryKey(device);
+                    //如果无法获取到学工信息，跳过该记录
+                    StudentInfo studentInfo = studentInfoService.get(r.getUserCode());
+                    if (studentInfo != null && studentInfo.getStudentno() == null) {
+                        locationLatest.setDataByStudentInfo(studentInfo);
+                    } else {
+                        TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
+                        locationLatest.setDataByTeacherInfo(teacherInfo);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
+                locationLatest.setInSchool(1);
+                locationLatest.setLng(device.getDeviceLng());
+                locationLatest.setLat(device.getDeviceLat());
+                locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
+                locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
+                locationLatestDao.deleteByPrimaryKey(locationLatest.getUserid());
+                locationLatests.add(locationLatest);
             }
-
-            locationLatest.setUserid(r.getUserCode());
-            try {
-                //如果无法获取到学工信息，跳过该记录
-                StudentInfo studentInfo = studentInfoService.get(r.getUserCode());
-                if (studentInfo != null && studentInfo.getStudentno() == null) {
-                    locationLatest.setRealname(studentInfo.getName());
-                    locationLatest.setGender(studentInfo.getGender());
-                    locationLatest.setOrgCode(studentInfo.getOrgCode());
-                    locationLatest.setOrgName(studentInfo.getOrgName());
-                } else {
-                    TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
-                    locationLatest.setRealname(teacherInfo.getName());
-                    locationLatest.setGender(teacherInfo.getGender());
-                    locationLatest.setOrgCode(teacherInfo.getOrgCode());
-                    locationLatest.setOrgName(teacherInfo.getOrgName());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
-            locationLatest.setInSchool(1);
-            locationLatest.setLng(device.getDeviceLng());
-            locationLatest.setLat(device.getDeviceLat());
-            locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
-            locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
-            locationLatestDao.deleteByPrimaryKey(locationLatest.getUserid());
-            locationLatestDao.insert(locationLatest);
+            locationLatestDao.insertBatch(locationLatests);
+            records = locationEcardUseRecordDao.selectEcardList(10000);
         }
+
     }
 }

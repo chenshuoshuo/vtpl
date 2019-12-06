@@ -15,6 +15,7 @@ public class LocationEcardDevice {
   private Double deviceLat;
   private Integer gisLeaf;
   private Integer orderId;
+  private String deviceStatus;
   private String memo;
 
   public String getDeviceCode() {
@@ -95,6 +96,13 @@ public class LocationEcardDevice {
     this.orderId = orderId;
   }
 
+  public String getDeviceStatus() {
+    return deviceStatus;
+  }
+
+  public void setDeviceStatus(String deviceStatus) {
+    this.deviceStatus = deviceStatus;
+  }
 
   public String getMemo() {
     return memo;

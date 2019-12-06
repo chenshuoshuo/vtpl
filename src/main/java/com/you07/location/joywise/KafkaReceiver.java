@@ -11,6 +11,7 @@ import com.you07.location.huawei.dao.HwApDao;
 import com.you07.location.huawei.model.HwAp;
 import com.you07.map.service.MapService;
 import com.you07.map.vo.MapInfoVO;
+import com.you07.util.StringUtil;
 import com.you07.vtpl.dao.LocationLatestDao;
 import com.you07.vtpl.model.LocationLatest;
 import org.apache.commons.lang.StringUtils;
@@ -65,6 +66,9 @@ public class KafkaReceiver {
                 logger.info("receive " + rawMessage.get());
                 if (StringUtils.isBlank(message.getAPMAC()))
                     throw new RuntimeException("无法获取APMAC");
+                if(StringUtils.isBlank(message.getUSERID())){
+                    throw new RuntimeException("无法获取学工号");
+                }
                 HwAp hwAp = hwApDao.selectHwapByMac(message.getAPMAC());
                 //设备不存在
                 if (hwAp == null) {
@@ -87,9 +91,13 @@ public class KafkaReceiver {
 
         if ("学生".equals(message.getUSERGROUPNAME())) {
             StudentInfo studentInfo = studentInfoService.get(message.getUSERID());
+            if(studentInfo == null || StringUtils.isBlank(studentInfo.getStudentno()))
+                throw new RuntimeException("学生不存在");
             locationLatest = new LocationLatest(studentInfo);
         } else if ("老师".equals(message.getUSERGROUPNAME())) {
             TeacherInfo teacherInfo = teacherInfoService.get(message.getUSERID());
+            if(teacherInfo == null || StringUtils.isBlank(teacherInfo.getTeachercode()))
+                throw new RuntimeException("教职工不存在");
             locationLatest = new LocationLatest(teacherInfo);
         } else {
             throw new RuntimeException("无法识别的用户组:" + message.getUSERGROUPNAME());

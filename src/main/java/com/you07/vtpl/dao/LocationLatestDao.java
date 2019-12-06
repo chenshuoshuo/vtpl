@@ -2,11 +2,10 @@ package com.you07.vtpl.dao;
 
 import com.you07.common.BaseDao;
 import com.you07.vtpl.model.LocationLatest;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface LocationLatestDao extends BaseDao<LocationLatest>{
@@ -78,4 +77,7 @@ public interface LocationLatestDao extends BaseDao<LocationLatest>{
 
     @Delete("delete from location_history_day where account_mac = 'vtpl-test-data' ")
     void clearTestDayData();
+
+    @InsertProvider(method = "insertBatch", type = LocationLatestProvider.class)
+    void insertBatch(@Param("list") List<LocationLatest> locationLatests);
 }
