@@ -77,7 +77,7 @@ public class DataGenerator {
             ClassVO classVO = classMap.get(studentVO.getClassCode());
             if(classVO == null)
                 continue;
-            MajorVO majorVO = majorMap.get(classVO.getClassCode());
+            MajorVO majorVO = majorMap.get(classVO.getMajorCode());
             if(majorVO == null)
                 continue;
             AcademyVO academyVO = academyMap.get(majorVO.getAcademyCode());

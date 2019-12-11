@@ -1,5 +1,7 @@
 package com.you07.eas.model;
 
+import com.you07.eas.vo.ClassVO;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;

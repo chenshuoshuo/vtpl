@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface LocationEcardUseRecordDao extends BaseDao<LocationEcardUseRecord> {
 
-    @Select("select * from location_ecard_use_record limit #{n}")
+    @Select("select * from location_ecard_use_record group by user_code,record_code limit #{n}")
     List<LocationEcardUseRecord> selectEcardList(@Param("n") Integer number);
 
 }

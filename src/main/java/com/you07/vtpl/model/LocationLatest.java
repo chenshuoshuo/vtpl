@@ -81,6 +81,18 @@ public class LocationLatest {
      */
     private Integer inSchool;
     /**
+     * 顺序
+     **/
+    private Integer orderid;
+    /**
+     * beizhu
+     **/
+    private String memo;
+    /**
+     * 坐标系类型
+     **/
+    private String type;
+    /**
      * 校区ID
      */
     private String zoneId;
@@ -102,11 +114,19 @@ public class LocationLatest {
     }
 
     public LocationLatest(StudentInfo studentInfo) {
-
+        setUserid(studentInfo.getStudentno());
+        setRealname(studentInfo.getName());
+        setGender(studentInfo.getGender());
+        setOrgCode(studentInfo.getOrgCode());
+        setOrgName(studentInfo.getOrgName());
     }
 
     public LocationLatest(TeacherInfo teacherInfo) {
-
+        setUserid(teacherInfo.getTeachercode());
+        setRealname(teacherInfo.getName());
+        setGender(teacherInfo.getGender());
+        setOrgCode(teacherInfo.getOrgCode());
+        setOrgName(teacherInfo.getOrgName());
     }
 
     public String getUserid() {
@@ -237,12 +257,36 @@ public class LocationLatest {
         this.zoneId = zoneId;
     }
 
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
     public String getTelephone() {
         return telephone;
     }
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public Integer getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setDataByStudentInfo(StudentInfo studentInfo) {

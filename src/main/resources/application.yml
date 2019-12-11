@@ -5,7 +5,6 @@ server:
     worker-threads: 32
     buffer-size: 2048
     direct-buffers: true
-  context-path: /vtpl
 
 spring:
   mvc:
@@ -15,6 +14,8 @@ spring:
   # kafka配置(卓智)
   kafka:
     bootstrap-servers: 10.200.254.3:9092
+    topic: zos_user_login_queue
+    #    bootstrap-servers: 127.0.0.1:9092
     consumer:
       group-id: vtpl-test
       auto-offset-reset: earliest
@@ -28,9 +29,12 @@ druid:
   type: com.alibaba.druid.pool.DruidDataSource
   postgresdefault:
     dirver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://211.149.141.72:5432/test_vtpl
+    #    url: jdbc:postgresql://211.149.159.39:5407/vtpl
+    #    username: postgres
+    #    password: Lqkjcs!@#147123
+    url: jdbc:postgresql://192.168.4.241:5432/vtpl_plus
     username: postgres
-    password: 6992005Ych
+    password: lqkj007
 
 mybatis:
   configuration:
@@ -47,10 +51,10 @@ mapper:
 logging:
   config: classpath:log4j2.xml
   level:
-    #com.you07.eas.dao: debug
-    #com.you07.vtpl.dao: debug
-    com.you07.map.dao: debug
-    com.you07.location.joywise: debug
+    com: debug
+  #  com.you07.vtpl.dao: debug
+  # com.you07.map.dao: debug
+  #com.you07.location.huawei.dao: debug
 
 flyway:
   baseline-on-migrate: true
@@ -65,12 +69,17 @@ cas:
   #城市热点参数
   city-hot:
     udp-port: 61440
-#锐捷上网身份认证
+  #锐捷上网身份认证
   ruijie:
     ip: '10.18.0.9'
-#深澜身份认证
+  #深澜身份认证
   shenlan:
     udp-port: 48910
+
+#一卡通定时器执行频率
+ecard:
+  cron: 0 * * * * *
+
 
 #定位系统：
 #0不对接定位
@@ -78,7 +87,6 @@ cas:
 #2华三泛定位
 #3华三AP定位
 #4华为泛定位
-
 location:
   location-type: 4
   #锐捷主动推送定位参数
@@ -100,16 +108,19 @@ location:
   huawei:
     udp_port: 32180
 
-#一卡通定时器执行频率
-ecard:
-  cron: 0/5 * * * * *
-
 #请求认证的接口地址
 oauth:
   client-id: cmccr-guest
   client-secret: cmccr-guest
   grant-type: client_credentials
   token: https://gis.hbmzu.edu.cn/cmccr-server/oauth/token
+#  #Client-Id
+#  username: free
+#  password: 123456
+#  #获得师生身份信息的接口地址
+#  serverEasUrl: https://testgis:you07:com/cmips-server
+#  #获取地图信息的接口
+#  serverMapUrl: https://testgis.you07.com/cmgis-server
+
 joywise:
   topics:
-    - zos_user_login_queue

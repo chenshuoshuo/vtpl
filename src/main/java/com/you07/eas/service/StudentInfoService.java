@@ -81,6 +81,32 @@ public class StudentInfoService {
         return JSONArray.parseArray(json, StudentVO.class);
     }
 
+    public Map<String, StudentInfo> getStudentMap(Integer size) throws IOException {
+        List<StudentVO> studentVOS = getStudentList(size);
+        Map<String, MajorVO> majorMap = getMajorMap();
+        Map<String, AcademyVO> academyMap = getAcademyMap();
+        Map<String, ClassVO> classMap = getClassMap();
+        Map<String, StudentInfo> stuMap = new HashMap<>();
+        for(StudentVO studentVO : studentVOS){
+            try {
+                ClassVO classVO = classMap.get(studentVO.getClassCode());
+                if(classVO == null)
+                    continue;
+                MajorVO majorVO = majorMap.get(classVO.getMajorCode());
+                if(majorVO == null)
+                    continue;
+                AcademyVO academyVO = academyMap.get(majorVO.getAcademyCode());
+                if(academyVO == null)
+                    continue;
+                stuMap.put(studentVO.getStudentNo(), new StudentInfo(studentVO, academyVO));
+            }catch (Exception e){
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return stuMap;
+    }
+
     public Map<String, MajorVO> getMajorMap(){
         String json = RestTemplateUtil.getJSONObjectForCmIps("/os/major/queryAll/").getJSONArray("data").toJSONString();
         Map<String, MajorVO> map = new HashMap<>();

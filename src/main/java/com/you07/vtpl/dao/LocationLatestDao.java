@@ -80,4 +80,7 @@ public interface LocationLatestDao extends BaseDao<LocationLatest>{
 
     @InsertProvider(method = "insertBatch", type = LocationLatestProvider.class)
     void insertBatch(@Param("list") List<LocationLatest> locationLatests);
+
+    @Delete("delete from location_latest where userid in (${ids}) ")
+    int deleteBatchById(@Param("ids") String ids);
 }

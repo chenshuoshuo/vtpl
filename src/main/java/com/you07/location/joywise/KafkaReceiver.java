@@ -11,7 +11,6 @@ import com.you07.location.huawei.dao.HwApDao;
 import com.you07.location.huawei.model.HwAp;
 import com.you07.map.service.MapService;
 import com.you07.map.vo.MapInfoVO;
-import com.you07.util.StringUtil;
 import com.you07.vtpl.dao.LocationLatestDao;
 import com.you07.vtpl.model.LocationLatest;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +22,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.Optional;
 
 
@@ -57,7 +57,7 @@ public class KafkaReceiver {
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
     }
 
-    @KafkaListener(topics = {"zos_user_login_queue"})
+    @KafkaListener(topics = {"${spring.kafka.topic}"})
     public void listen(ConsumerRecord<?, ?> record) throws IOException {
         Optional<?> rawMessage = Optional.ofNullable(record.value());
         if (rawMessage.isPresent()) {
@@ -111,13 +111,17 @@ public class KafkaReceiver {
             hwAp.setLat(mapInfoVO.getCenter().getY());
             hwAp.setFloorid(mapInfoVO.getLevel());
             hwApDao.updataHwAp(hwAp.getLng(), hwAp.getLat(), hwAp.getDeviceMac(), hwAp.getZoneId());
-        }
 
+        }
+        locationLatest.setAccountMac(message.getUSERMAC());
+        locationLatest.setZoneId(hwAp.getZoneId());
         locationLatest.setFloorid(hwAp.getFloorid());
         locationLatest.setLng(hwAp.getLng());
         locationLatest.setLat(hwAp.getLat());
         locationLatest.setInSchool(1);
         locationLatest.setInDoor(hwAp.getIndoor());
+        locationLatest.setLocationTime(new Date(message.getLOGINTIME()));
+        locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
         locationLatestDao.deleteByPrimaryKey(locationLatest.getUserid());
         locationLatestDao.insertSelective(locationLatest);
     }

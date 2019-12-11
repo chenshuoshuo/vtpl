@@ -12,14 +12,20 @@ import com.you07.vtpl.dao.LocationLatestDao;
 import com.you07.vtpl.model.LocationEcardDevice;
 import com.you07.vtpl.model.LocationEcardUseRecord;
 import com.you07.vtpl.model.LocationLatest;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.acl.LastOwnerException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author egan
@@ -47,6 +53,14 @@ public class LocationEcardService {
     @Autowired
     private TeacherInfoService teacherInfoService;
 
+    @Value("${ecard.max-data-count}")
+    private Integer maxDataCount;
+
+    private Logger logger = LoggerFactory.getLogger(LocationEcardService.class);
+
+    private static Map<String, StudentInfo> stuMap = null;
+
+
     /**
      * egan
      * 将一卡通使用记录转换成最后点位保存在latest_location表中
@@ -56,59 +70,98 @@ public class LocationEcardService {
      **/
     @Transactional
     public synchronized void saveEcardRecord() {
-        //每次限制存一万条
-        List<LocationEcardUseRecord> records = locationEcardUseRecordDao.selectEcardList(10000);
-        //如果有数据，转换成location_latest
-        while(records.size()>0){
-            List<LocationLatest> locationLatests = new ArrayList<>();
-            for (LocationEcardUseRecord r : records) {
-                LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
-                LocationLatest locationLatest = new LocationLatest();
-                if (device == null) {
-                    device = new LocationEcardDevice();
-                    device.setDeviceCode(r.getDeviceCode());
-                    device.setDeviceName("未识别设备");
-                }
-                if (device.getDeviceLat() == null || device.getDeviceLng() == null || device.getGisLeaf() == null) {
-                    MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
-                    try {
-                        locationLatest.setZoneId(mapInfoVO.getZoneId());
-                        //如果无法获取到经纬度，跳过该记录
-                        device.setDeviceLat(mapInfoVO.getCenter().getX());
-                        device.setDeviceLng(mapInfoVO.getCenter().getX());
-                        device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
-                        locationEcardDeviceDao.updateByPrimaryKey(device);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        continue;
-                    }
-                }
+        if (stuMap == null) {
+            stuMap = getStuMap(50000);
+            logger.info("初始化学生数据");
+        }
 
-                locationLatest.setUserid(r.getUserCode());
+        long startTime = System.currentTimeMillis();
+        //每次限制存若干条条
+        List<LocationEcardUseRecord> records = locationEcardUseRecordDao.selectEcardList(maxDataCount);
+        //如果有数据，转换成location_latest
+        List<LocationLatest> locationLatests = new ArrayList<>();
+        for (LocationEcardUseRecord r : records) {
+            LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
+            LocationLatest locationLatest = new LocationLatest();
+            if (device == null) {
+                device = new LocationEcardDevice();
+                device.setDeviceCode(r.getDeviceCode());
+                device.setDeviceName("未识别设备");
+                device.setInstallCampus("桂花园校区二维");
+                device.setInstallBuilding("图书馆");
+                device.setDeviceLng(109.49604560934876);
+                device.setDeviceLat(30.297168113159817);
+                locationEcardDeviceDao.updateByPrimaryKey(device);
+            }
+            if (device.getDeviceLat() == null || device.getDeviceLng() == null) {
+                MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
                 try {
-                    //如果无法获取到学工信息，跳过该记录
-                    StudentInfo studentInfo = studentInfoService.get(r.getUserCode());
-                    if (studentInfo != null && studentInfo.getStudentno() == null) {
-                        locationLatest.setDataByStudentInfo(studentInfo);
-                    } else {
-                        TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
-                        locationLatest.setDataByTeacherInfo(teacherInfo);
-                    }
+                    locationLatest.setZoneId(mapInfoVO.getZoneId());
+                    //如果无法获取到经纬度，跳过该记录
+                    device.setDeviceLat(mapInfoVO.getCenter().getX());
+                    device.setDeviceLng(mapInfoVO.getCenter().getX());
+                    if (StringUtils.isNotBlank(mapInfoVO.getLevel()))
+                        device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
+                    locationEcardDeviceDao.updateByPrimaryKey(device);
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
-                locationLatest.setInSchool(1);
-                locationLatest.setLng(device.getDeviceLng());
-                locationLatest.setLat(device.getDeviceLat());
-                locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
-                locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
-                locationLatestDao.deleteByPrimaryKey(locationLatest.getUserid());
-                locationLatests.add(locationLatest);
             }
-            locationLatestDao.insertBatch(locationLatests);
-            records = locationEcardUseRecordDao.selectEcardList(10000);
-        }
 
+            locationLatest.setUserid(r.getUserCode());
+            try {
+                //如果无法获取到学工信息，跳过该记录
+                //先尝试从缓存中获取学生数据
+                StudentInfo studentInfo = stuMap.get(r.getUserCode());
+                if (studentInfo != null && studentInfo.getStudentno() != null) {
+                    locationLatest.setDataByStudentInfo(studentInfo);
+                } else {
+                    //如果缓存中不存在，到cmips进行网络请求
+                    studentInfo = studentInfoService.get(r.getUserCode());
+                    if (studentInfo != null && studentInfo.getStudentno() != null) {
+                        locationLatest.setDataByStudentInfo(studentInfo);
+                    } else {
+                        TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
+                        if (teacherInfo == null || StringUtils.isBlank(teacherInfo.getTeachercode()))
+                            throw new RuntimeException("学工信息不存在:" + r.getUserCode());
+                        locationLatest.setDataByTeacherInfo(teacherInfo);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+            locationLatest.setInSchool(1);
+            locationLatest.setLng(device.getDeviceLng());
+            locationLatest.setLat(device.getDeviceLat());
+            locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
+            locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
+
+            locationLatests.add(locationLatest);
+        }
+        locationLatestDao.deleteBatchById(covertListStringToInSQL(locationLatests.stream().map(LocationLatest::getUserid).collect(Collectors.toList())));
+        locationLatestDao.insertBatch(locationLatests);
+
+        logger.info("一卡通定时器执行了一个任务，用时" + (System.currentTimeMillis() - startTime) / 1000 + "s");
+    }
+
+    private Map<String, StudentInfo> getStuMap(Integer size) {
+        try {
+            return studentInfoService.getStudentMap(size);
+        } catch (IOException e) {
+            logger.error("无法获取学生信息");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String covertListStringToInSQL(List list){
+        if(list == null || list.size() == 0)
+            return "";
+        StringBuilder inSQL = new StringBuilder();
+        inSQL.append("'").append(list.get(0)).append("'");
+        for(int i=1; i<list.size(); i++)
+            inSQL.append(",'").append(list.get(i)).append("'");
+        return inSQL.toString();
     }
 }
