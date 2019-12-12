@@ -1,7 +1,6 @@
 package com.you07.vtpl.service;
 
 import com.you07.eas.model.StudentInfo;
-import com.you07.eas.model.TeacherInfo;
 import com.you07.eas.service.StudentInfoService;
 import com.you07.eas.service.TeacherInfoService;
 import com.you07.map.service.MapService;
@@ -84,14 +83,7 @@ public class LocationEcardService {
             LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
             LocationLatest locationLatest = new LocationLatest();
             if (device == null) {
-                device = new LocationEcardDevice();
-                device.setDeviceCode(r.getDeviceCode());
-                device.setDeviceName("未识别设备");
-                device.setInstallCampus("桂花园校区二维");
-                device.setInstallBuilding("图书馆");
-                device.setDeviceLng(109.49604560934876);
-                device.setDeviceLat(30.297168113159817);
-                locationEcardDeviceDao.insertSelective(device);
+                throw new RuntimeException("未识别设备："+r.getDeviceCode());
             }
             if (device.getDeviceLat() == null || device.getDeviceLng() == null) {
                 MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
@@ -118,16 +110,17 @@ public class LocationEcardService {
                 if (studentInfo != null && studentInfo.getStudentno() != null) {
                     locationLatest.setDataByStudentInfo(studentInfo);
                 } else {
-                    //如果缓存中不存在，到cmips进行网络请求
-                    studentInfo = studentInfoService.get(r.getUserCode());
-                    if (studentInfo != null && studentInfo.getStudentno() != null) {
-                        locationLatest.setDataByStudentInfo(studentInfo);
-                    } else {
-                        TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
-                        if (teacherInfo == null || StringUtils.isBlank(teacherInfo.getTeachercode()))
-                            throw new RuntimeException("学工信息不存在:" + r.getUserCode());
-                        locationLatest.setDataByTeacherInfo(teacherInfo);
-                    }
+                    throw new RuntimeException("学工信息不存在:" + r.getUserCode());
+//                    //如果缓存中不存在，到cmips进行网络请求
+//                    studentInfo = studentInfoService.get(r.getUserCode());
+//                    if (studentInfo != null && studentInfo.getStudentno() != null) {
+//                        locationLatest.setDataByStudentInfo(studentInfo);
+//                    } else {
+//                        TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
+//                        if (teacherInfo == null || StringUtils.isBlank(teacherInfo.getTeachercode()))
+//                            throw new RuntimeException("学工信息不存在:" + r.getUserCode());
+//                        locationLatest.setDataByTeacherInfo(teacherInfo);
+//                    }
                 }
             } catch (Exception e) {
                 logger.warn(e.getMessage());
@@ -160,12 +153,12 @@ public class LocationEcardService {
         }
     }
 
-    private static String covertListStringToInSQL(List list){
-        if(list == null || list.size() == 0)
+    private static String covertListStringToInSQL(List list) {
+        if (list == null || list.size() == 0)
             return "";
         StringBuilder inSQL = new StringBuilder();
         inSQL.append("'").append(list.get(0)).append("'");
-        for(int i=1; i<list.size(); i++)
+        for (int i = 1; i < list.size(); i++)
             inSQL.append(",'").append(list.get(i)).append("'");
         return inSQL.toString();
     }
