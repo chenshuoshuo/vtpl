@@ -37,6 +37,8 @@ public class MapService {
     public MapInfoVO queryFloorCenterLngLat(String campusName, String buildingName, String roomName) {
         if(StringUtils.isBlank(campusName))
             throw new NullPointerException("校区名称不能为空");
+        if(StringUtils.isBlank(buildingName))
+            throw new NullPointerException("建筑名称不能为空");
         StringBuilder uri = new StringBuilder("/map/v2/regeo/code?zoneName=" + campusName);
         if(StringUtils.isNotBlank(roomName))
             uri.append("&roomName=").append(roomName);

@@ -10,6 +10,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -30,6 +32,8 @@ import java.util.Collections;
  **/
 @Component
 public class RestTemplateUtil {
+
+    private final static Logger logger = LoggerFactory.getLogger(RestTemplateUtil.class);
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -101,7 +105,7 @@ public class RestTemplateUtil {
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("utf-8")));
         restTemplate.setInterceptors(Collections.<ClientHttpRequestInterceptor>singletonList(interceptor));
         String url = systemConfig.getLqMapGisUrl() + uri;
-        System.out.println(url + "\n" + JSONObject.toJSONString(postData));
+        logger.debug(url + "\n" + JSONObject.toJSONString(postData));
         JSONObject jsonObject =  restTemplate.postForEntity(url, postData, JSONObject.class).getBody();
         return jsonObject;
     }
@@ -112,9 +116,9 @@ public class RestTemplateUtil {
         if (interceptor != null) {
             restTemplate.setInterceptors(Collections.<ClientHttpRequestInterceptor>singletonList(interceptor));
         }
-        System.out.println(url);
+        logger.debug(url);
         JSONObject responseJson = restTemplate.getForEntity(url, JSONObject.class).getBody();
-        System.out.println(responseJson.toJSONString());
+        logger.debug(responseJson.toJSONString());
         return responseJson;
     }
 

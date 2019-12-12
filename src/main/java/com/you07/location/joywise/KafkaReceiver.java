@@ -70,10 +70,9 @@ public class KafkaReceiver {
                     throw new RuntimeException("无法获取学工号");
                 }
                 HwAp hwAp = hwApDao.selectHwapByMac(message.getAPMAC());
-                //设备不存在
+                //设备不存在,丢弃数据
                 if (hwAp == null) {
-                    hwAp = new HwAp(message);
-                    hwApDao.insert(hwAp);
+                    throw new RuntimeException("设备不存在："+message.getAPMAC());
                 }
                 generateLocationLatest(hwAp, message);
             } catch (Exception e) {
@@ -104,14 +103,18 @@ public class KafkaReceiver {
         }
 
         if(hwAp.getLng() == null || hwAp.getLat() == null){
+            if("设备错误".equals(hwAp.getMemo()))
+                throw new RuntimeException("设备错误，请先检查设备");
             MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
-            if (mapInfoVO.getCenter() == null)
-                throw new RuntimeException("无法获取AP设备坐标");
+            if (mapInfoVO.getCenter() == null){
+                hwAp.setMemo("设备错误");
+                hwApDao.updateByPrimaryKey(hwAp);
+                throw new RuntimeException("无法获取设备地址，已标记为设备错误");
+            }
             hwAp.setLng(mapInfoVO.getCenter().getX());
             hwAp.setLat(mapInfoVO.getCenter().getY());
             hwAp.setFloorid(mapInfoVO.getLevel());
             hwApDao.updataHwAp(hwAp.getLng(), hwAp.getLat(), hwAp.getDeviceMac(), hwAp.getZoneId());
-
         }
         locationLatest.setAccountMac(message.getUSERMAC());
         locationLatest.setZoneId(hwAp.getZoneId());

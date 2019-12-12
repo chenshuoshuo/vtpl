@@ -91,7 +91,7 @@ public class LocationEcardService {
                 device.setInstallBuilding("图书馆");
                 device.setDeviceLng(109.49604560934876);
                 device.setDeviceLat(30.297168113159817);
-                locationEcardDeviceDao.updateByPrimaryKey(device);
+                locationEcardDeviceDao.insertSelective(device);
             }
             if (device.getDeviceLat() == null || device.getDeviceLng() == null) {
                 MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
@@ -104,6 +104,7 @@ public class LocationEcardService {
                         device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
                     locationEcardDeviceDao.updateByPrimaryKey(device);
                 } catch (Exception e) {
+                    logger.warn("获取经纬度失败", e);
                     e.printStackTrace();
                     continue;
                 }
@@ -129,6 +130,7 @@ public class LocationEcardService {
                     }
                 }
             } catch (Exception e) {
+                logger.warn(e.getMessage());
                 e.printStackTrace();
                 continue;
             }
@@ -141,6 +143,9 @@ public class LocationEcardService {
             locationLatests.add(locationLatest);
         }
         locationLatestDao.deleteBatchById(covertListStringToInSQL(locationLatests.stream().map(LocationLatest::getUserid).collect(Collectors.toList())));
+//        for(LocationLatest l : locationLatests){
+//            locationLatestDao.insert(l);
+//        }
         locationLatestDao.insertBatch(locationLatests);
 
         logger.info("一卡通定时器执行了一个任务，用时" + (System.currentTimeMillis() - startTime) / 1000 + "s");
