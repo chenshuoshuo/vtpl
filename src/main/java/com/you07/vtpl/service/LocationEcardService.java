@@ -147,10 +147,8 @@ public class LocationEcardService {
             locationLatests.add(locationLatest);
         }
         locationLatestDao.deleteBatchById(covertListStringToInSQL(locationLatests.stream().map(LocationLatest::getUserid).collect(Collectors.toList())));
-//        for(LocationLatest l : locationLatests){
-//            locationLatestDao.insert(l);
-//        }
         locationLatestDao.insertBatch(locationLatests);
+        locationEcardUseRecordDao.deleteBatchById(covertListStringToInSQL(records.stream().map(LocationEcardUseRecord::getRecordCode).collect(Collectors.toList())));
 
         logger.info("一卡通定时器执行了一个任务，用时" + (System.currentTimeMillis() - startTime) / 1000 + "s");
     }
