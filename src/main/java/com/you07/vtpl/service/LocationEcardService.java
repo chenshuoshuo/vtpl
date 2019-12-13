@@ -103,6 +103,8 @@ public class LocationEcardService {
             }
 
             locationLatest.setUserid(r.getUserCode());
+            locationLatest.setLocationTime(r.getUseTime());
+            locationLatest.setAccountMac(r.getEcardNo());
             try {
                 //如果无法获取到学工信息，跳过该记录
                 //先尝试从缓存中获取学生数据
