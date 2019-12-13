@@ -9,10 +9,13 @@ import com.you07.vtpl.dao.LocationLatestDao;
 import com.you07.vtpl.form.GeneratorForm;
 import com.you07.vtpl.model.LocationCampusInfo;
 import com.you07.vtpl.model.LocationLatest;
+import com.you07.vtpl.service.LocationEcardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,9 +33,9 @@ import java.util.Map;
  * @date 2019/11/26 16:43
  * @desc 测试数据生成器
  */
-@Api(tags = {"测试数据管理"})
+@Api(tags = {"数据管理"})
 @RestController
-public class DataGenerator {
+public class DataManager {
 
     @Autowired
     private LocationLatestDao locationLatestDao;
@@ -43,8 +46,15 @@ public class DataGenerator {
     @Autowired
     private StudentInfoService studentInfoService;
 
+    @ApiOperation("清空学工数据缓存")
+    @DeleteMapping("/cache")
+    public MessageBean clearCache(){
+        LocationEcardService.clear();
+        return MessageBean.ok();
+    }
+
     @ApiOperation("生成测试数据")
-    @GetMapping("/generate")
+    @GetMapping("/test")
     @Transactional
     public MessageBean generate(@Valid GeneratorForm form) throws IOException, ParseException {
 
@@ -106,7 +116,7 @@ public class DataGenerator {
     }
 
     @ApiOperation("清空测试数据(部分删除/完全删除)")
-    @GetMapping("/clear")
+    @DeleteMapping("/test")
     public MessageBean clear(boolean complete){
         locationLatestDao.clearTestData();
         if(complete){
@@ -114,6 +124,6 @@ public class DataGenerator {
             locationLatestDao.clearTestMonthData();
             locationLatestDao.clearTestDayData();
         }
-        return new MessageBean();
+        return MessageBean.ok();
     }
 }

@@ -12,6 +12,14 @@ public class MessageBean<T>  extends MessageBaseBean implements Serializable {
         this.setTime(System.currentTimeMillis());
     }
 
+    public static MessageBean ok(){
+        MessageBean messageBean = new MessageBean();
+        messageBean.setStatus(true);
+        messageBean.setCode(200);
+        messageBean.setMessage("成功");
+        return messageBean;
+    }
+
     public MessageBean(T data) {
         this.data = data;
 

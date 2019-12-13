@@ -81,7 +81,7 @@ public class StudentInfoService {
         return JSONArray.parseArray(json, StudentVO.class);
     }
 
-    public Map<String, StudentInfo> getStudentMap(Integer size) throws IOException {
+    public Map<String, StudentInfo> generateStudentMap(Integer size) throws IOException {
         List<StudentVO> studentVOS = getStudentList(size);
         Map<String, MajorVO> majorMap = getMajorMap();
         Map<String, AcademyVO> academyMap = getAcademyMap();

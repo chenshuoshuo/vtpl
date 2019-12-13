@@ -36,33 +36,38 @@ import java.util.stream.Collectors;
 @Service
 public class LocationEcardService {
 
-    @Autowired
-    private LocationEcardDeviceDao locationEcardDeviceDao;
+    private final LocationEcardDeviceDao locationEcardDeviceDao;
 
-    @Autowired
-    private LocationEcardUseRecordDao locationEcardUseRecordDao;
+    private final LocationEcardUseRecordDao locationEcardUseRecordDao;
 
-    @Autowired
-    private LocationLatestDao locationLatestDao;
+    private final LocationLatestDao locationLatestDao;
 
-    @Autowired
-    private MapService mapService;
+    private final MapService mapService;
 
-    @Autowired
-    private StudentInfoService studentInfoService;
+    private static StudentInfoService studentInfoService;
 
-    @Autowired
-    private TeacherInfoService teacherInfoService;
+    private final TeacherInfoService teacherInfoService;
 
-    @Autowired
-    private LocationCampusInfoDao campusInfoDao;
+    private final LocationCampusInfoDao campusInfoDao;
 
     @Value("${ecard.max-data-count}")
     private Integer maxDataCount;
 
-    private Logger logger = LoggerFactory.getLogger(LocationEcardService.class);
+    private static Logger logger = LoggerFactory.getLogger(LocationEcardService.class);
 
-    private static Map<String, StudentInfo> stuMap = null;
+    private static Map<String, StudentInfo> studentMap = null;
+
+    @Autowired
+    public LocationEcardService(LocationEcardDeviceDao locationEcardDeviceDao, LocationEcardUseRecordDao locationEcardUseRecordDao, LocationLatestDao locationLatestDao, MapService mapService, StudentInfoService studentInfoService, TeacherInfoService teacherInfoService, LocationCampusInfoDao campusInfoDao) {
+        this.locationEcardDeviceDao = locationEcardDeviceDao;
+        this.locationEcardUseRecordDao = locationEcardUseRecordDao;
+        this.locationLatestDao = locationLatestDao;
+        this.mapService = mapService;
+        LocationEcardService.studentInfoService = studentInfoService;
+        this.teacherInfoService = teacherInfoService;
+        this.campusInfoDao = campusInfoDao;
+    }
+
 
 
     /**
@@ -74,13 +79,10 @@ public class LocationEcardService {
      **/
     @Transactional
     public synchronized void saveEcardRecord() {
-        if (stuMap == null) {
-            stuMap = getStuMap(50000);
-            logger.info("初始化学生数据");
-        }
+
 
         long startTime = System.currentTimeMillis();
-        //每次限制存若干条条
+        //每次限制存若干条
         List<LocationEcardUseRecord> records = locationEcardUseRecordDao.selectEcardList(maxDataCount);
         //如果有数据，转换成location_latest
         List<LocationLatest> locationLatests = new ArrayList<>();
@@ -94,8 +96,8 @@ public class LocationEcardService {
                 MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
                 try {
                     //如果无法获取到经纬度，跳过该记录
-                    device.setDeviceLat(mapInfoVO.getCenter().getX());
                     device.setDeviceLng(mapInfoVO.getCenter().getX());
+                    device.setDeviceLat(mapInfoVO.getCenter().getY());
                     if (StringUtils.isNotBlank(mapInfoVO.getLevel()))
                         device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
                     locationEcardDeviceDao.updateByPrimaryKey(device);
@@ -116,22 +118,12 @@ public class LocationEcardService {
             locationLatest.setAccountMac(r.getEcardNo());
             try {
                 //如果无法获取到学工信息，跳过该记录
-                //先尝试从缓存中获取学生数据
-                StudentInfo studentInfo = stuMap.get(r.getUserCode());
+                //从缓存中获取学生数据
+                StudentInfo studentInfo = getStudentFromMap(r.getUserCode());
                 if (studentInfo != null && studentInfo.getStudentno() != null) {
                     locationLatest.setDataByStudentInfo(studentInfo);
                 } else {
                     throw new RuntimeException("学工信息不存在:" + r.getUserCode());
-//                    //如果缓存中不存在，到cmips进行网络请求
-//                    studentInfo = studentInfoService.get(r.getUserCode());
-//                    if (studentInfo != null && studentInfo.getStudentno() != null) {
-//                        locationLatest.setDataByStudentInfo(studentInfo);
-//                    } else {
-//                        TeacherInfo teacherInfo = teacherInfoService.get(r.getUserCode());
-//                        if (teacherInfo == null || StringUtils.isBlank(teacherInfo.getTeachercode()))
-//                            throw new RuntimeException("学工信息不存在:" + r.getUserCode());
-//                        locationLatest.setDataByTeacherInfo(teacherInfo);
-//                    }
                 }
             } catch (Exception e) {
                 logger.warn(e.getMessage());
@@ -153,9 +145,21 @@ public class LocationEcardService {
         logger.info("一卡通定时器执行了一个任务，用时" + (System.currentTimeMillis() - startTime) / 1000 + "s");
     }
 
-    private Map<String, StudentInfo> getStuMap(Integer size) {
+    public static void clear() {
+        studentMap = null;
+    }
+
+    private static StudentInfo getStudentFromMap(String id){
+        if (studentMap == null) {
+            studentMap = getStudentMap(50000);
+            logger.info("初始化学生数据：" + studentMap.size() +" 条");
+        }
+        return studentMap.get(id);
+    }
+
+    private static Map<String, StudentInfo> getStudentMap(Integer size) {
         try {
-            return studentInfoService.getStudentMap(size);
+            return studentInfoService.generateStudentMap(size);
         } catch (IOException e) {
             logger.error("无法获取学生信息");
             throw new RuntimeException(e);
