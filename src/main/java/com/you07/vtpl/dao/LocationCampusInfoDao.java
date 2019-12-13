@@ -24,4 +24,14 @@ public interface LocationCampusInfoDao extends BaseDao<LocationCampusInfo>{
             "select * from location_campus_info where school_id = #{schoolId} and is_default = 1"
     })
     LocationCampusInfo loadDefaultCampus(@Param("schoolId") Integer schoolId);
+
+    /**
+     * 根据名称获取校区
+     * @param name
+     * @return
+     */
+    @Select({
+            "select * from location_campus_info where campus_name = #{name}"
+    })
+    LocationCampusInfo selectOneByName(@Param("name") String name);
 }

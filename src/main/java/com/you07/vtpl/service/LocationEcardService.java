@@ -5,9 +5,11 @@ import com.you07.eas.service.StudentInfoService;
 import com.you07.eas.service.TeacherInfoService;
 import com.you07.map.service.MapService;
 import com.you07.map.vo.MapInfoVO;
+import com.you07.vtpl.dao.LocationCampusInfoDao;
 import com.you07.vtpl.dao.LocationEcardDeviceDao;
 import com.you07.vtpl.dao.LocationEcardUseRecordDao;
 import com.you07.vtpl.dao.LocationLatestDao;
+import com.you07.vtpl.model.LocationCampusInfo;
 import com.you07.vtpl.model.LocationEcardDevice;
 import com.you07.vtpl.model.LocationEcardUseRecord;
 import com.you07.vtpl.model.LocationLatest;
@@ -52,6 +54,9 @@ public class LocationEcardService {
     @Autowired
     private TeacherInfoService teacherInfoService;
 
+    @Autowired
+    private LocationCampusInfoDao campusInfoDao;
+
     @Value("${ecard.max-data-count}")
     private Integer maxDataCount;
 
@@ -88,7 +93,6 @@ public class LocationEcardService {
             if (device.getDeviceLat() == null || device.getDeviceLng() == null) {
                 MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
                 try {
-                    locationLatest.setZoneId(mapInfoVO.getZoneId());
                     //如果无法获取到经纬度，跳过该记录
                     device.setDeviceLat(mapInfoVO.getCenter().getX());
                     device.setDeviceLng(mapInfoVO.getCenter().getX());
@@ -101,6 +105,11 @@ public class LocationEcardService {
                     continue;
                 }
             }
+            LocationCampusInfo locationCampusInfo = campusInfoDao.selectOneByName(device.getInstallCampus());
+            if(locationCampusInfo == null){
+                throw new NullPointerException("校区不存在:"+device.getInstallCampus());
+            }
+            locationLatest.setZoneId(String.valueOf(locationCampusInfo.getCampusId()));
 
             locationLatest.setUserid(r.getUserCode());
             locationLatest.setLocationTime(r.getUseTime());
