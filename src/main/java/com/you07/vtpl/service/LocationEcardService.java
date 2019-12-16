@@ -5,6 +5,7 @@ import com.you07.eas.service.StudentInfoService;
 import com.you07.eas.service.TeacherInfoService;
 import com.you07.map.service.MapService;
 import com.you07.map.vo.MapInfoVO;
+import com.you07.vtpl.VTPLException;
 import com.you07.vtpl.dao.LocationCampusInfoDao;
 import com.you07.vtpl.dao.LocationEcardDeviceDao;
 import com.you07.vtpl.dao.LocationEcardUseRecordDao;
@@ -90,7 +91,7 @@ public class LocationEcardService {
             LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
             LocationLatest locationLatest = new LocationLatest();
             if (device == null) {
-                throw new RuntimeException("未识别设备："+r.getDeviceCode());
+                throw new VTPLException("未识别设备："+r.getDeviceCode());
             }
             if (device.getDeviceLat() == null || device.getDeviceLng() == null) {
                 MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
@@ -109,7 +110,7 @@ public class LocationEcardService {
             }
             LocationCampusInfo locationCampusInfo = campusInfoDao.selectOneByName(device.getInstallCampus());
             if(locationCampusInfo == null){
-                throw new NullPointerException("校区不存在:"+device.getInstallCampus());
+                throw new VTPLException("校区不存在:"+device.getInstallCampus());
             }
             locationLatest.setZoneId(String.valueOf(locationCampusInfo.getCampusId()));
 
@@ -123,11 +124,13 @@ public class LocationEcardService {
                 if (studentInfo != null && studentInfo.getStudentno() != null) {
                     locationLatest.setDataByStudentInfo(studentInfo);
                 } else {
-                    throw new RuntimeException("学工信息不存在:" + r.getUserCode());
+                    throw new VTPLException("学工信息不存在:" + r.getUserCode());
                 }
-            } catch (Exception e) {
-                logger.warn(e.getMessage());
-                e.printStackTrace();
+            } catch (VTPLException ve) {
+                logger.warn("数据接收失败:"+ ve.getMessage());
+                continue;
+            }catch (Exception e){
+                logger.warn("接收一卡通数据时发生未知错误", e);
                 continue;
             }
             locationLatest.setInSchool(1);
