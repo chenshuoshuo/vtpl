@@ -112,7 +112,7 @@ public class DataManager {
             locationLatestDao.insert(locationLatest);
         }
 
-        return new MessageBean();
+        return MessageBean.ok();
     }
 
     @ApiOperation("清空测试数据(部分删除/完全删除)")

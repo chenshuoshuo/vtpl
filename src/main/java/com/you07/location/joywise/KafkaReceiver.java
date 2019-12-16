@@ -11,6 +11,7 @@ import com.you07.location.huawei.dao.HwApDao;
 import com.you07.location.huawei.model.HwAp;
 import com.you07.map.service.MapService;
 import com.you07.map.vo.MapInfoVO;
+import com.you07.vtpl.VTPLException;
 import com.you07.vtpl.dao.LocationLatestDao;
 import com.you07.vtpl.model.LocationLatest;
 import org.apache.commons.lang.StringUtils;
@@ -65,19 +66,20 @@ public class KafkaReceiver {
                 Message message = objectMapper.readValue(rawMessage.get().toString(), Message.class);
                 logger.info("receive " + rawMessage.get());
                 if (StringUtils.isBlank(message.getAPMAC()))
-                    throw new RuntimeException("无法获取APMAC");
+                    throw new VTPLException("无法获取APMAC");
                 if(StringUtils.isBlank(message.getUSERID())){
-                    throw new RuntimeException("无法获取学工号");
+                    throw new VTPLException("无法获取学工号");
                 }
                 HwAp hwAp = hwApDao.selectHwapByMac(message.getAPMAC());
                 //设备不存在,丢弃数据
                 if (hwAp == null) {
-                    throw new RuntimeException("设备不存在："+message.getAPMAC());
+                    throw new VTPLException("设备不存在："+message.getAPMAC());
                 }
                 generateLocationLatest(hwAp, message);
-            } catch (Exception e) {
-                logger.warn("数据消费失败", e);
-                e.printStackTrace();
+            } catch (VTPLException ve) {
+                logger.warn("数据消费失败:"+ ve.getMessage());
+            }catch (Exception e){
+                logger.warn("接收卓智日志时发生未知错误", e);
             }
         } else {
             logger.warn("不合法的返回值：" + rawMessage.get());
@@ -91,25 +93,25 @@ public class KafkaReceiver {
         if ("学生".equals(message.getUSERGROUPNAME())) {
             StudentInfo studentInfo = studentInfoService.get(message.getUSERID());
             if(studentInfo == null || StringUtils.isBlank(studentInfo.getStudentno()))
-                throw new RuntimeException("学生不存在");
+                throw new VTPLException("学生不存在");
             locationLatest = new LocationLatest(studentInfo);
         } else if ("老师".equals(message.getUSERGROUPNAME())) {
             TeacherInfo teacherInfo = teacherInfoService.get(message.getUSERID());
             if(teacherInfo == null || StringUtils.isBlank(teacherInfo.getTeachercode()))
-                throw new RuntimeException("教职工不存在");
+                throw new VTPLException("教职工不存在");
             locationLatest = new LocationLatest(teacherInfo);
         } else {
-            throw new RuntimeException("无法识别的用户组:" + message.getUSERGROUPNAME());
+            throw new VTPLException("无法识别的用户组:" + message.getUSERGROUPNAME());
         }
 
         if(hwAp.getLng() == null || hwAp.getLat() == null){
             if("设备错误".equals(hwAp.getMemo()))
-                throw new RuntimeException("设备错误，请先检查设备");
+                throw new VTPLException("设备错误，请先检查设备");
             MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(hwAp.getCampus(), hwAp.getBuilding(), hwAp.getRoom());
             if (mapInfoVO.getCenter() == null){
                 hwAp.setMemo("设备错误");
                 hwApDao.updateByPrimaryKey(hwAp);
-                throw new RuntimeException("无法获取设备地址，已标记为设备错误");
+                throw new VTPLException("无法获取设备地址，已标记为设备错误");
             }
             hwAp.setLng(mapInfoVO.getCenter().getX());
             hwAp.setLat(mapInfoVO.getCenter().getY());

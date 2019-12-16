@@ -85,6 +85,9 @@ public class StudentInfo{
 		setGender(studentVO.getGender());
 		setName(studentVO.getRealName());
 		setTel(studentVO.getTelephone());
+		ClassInfo classInfo = new ClassInfo();
+		classInfo.setClasscode(studentVO.getClassCode());
+		setClassInfo(classInfo);
 		setOrgCode(academyVO.getAcademyCode());
 		setOrgName(academyVO.getAcademyName());
 	}

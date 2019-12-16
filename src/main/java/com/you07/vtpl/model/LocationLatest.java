@@ -109,7 +109,7 @@ public class LocationLatest {
         setGender(studentVO.getGender());
         setRealname(studentVO.getRealName());
         setTelephone(studentVO.getTelephone());
-        setOrgCode(academyVO.getAcademyCode());
+        setOrgCode(studentVO.getClassCode());
         setOrgName(academyVO.getAcademyName());
     }
 
@@ -117,7 +117,7 @@ public class LocationLatest {
         setUserid(studentInfo.getStudentno());
         setRealname(studentInfo.getName());
         setGender(studentInfo.getGender());
-        setOrgCode(studentInfo.getOrgCode());
+        setOrgCode(studentInfo.getClassInfo().getClasscode());
         setOrgName(studentInfo.getOrgName());
     }
 
