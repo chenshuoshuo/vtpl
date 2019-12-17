@@ -70,7 +70,6 @@ public class LocationEcardService {
     }
 
 
-
     /**
      * egan
      * 将一卡通使用记录转换成最后点位保存在latest_location表中
@@ -91,7 +90,10 @@ public class LocationEcardService {
             LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
             LocationLatest locationLatest = new LocationLatest();
             if (device == null) {
-                throw new VTPLException("未识别设备："+r.getDeviceCode());
+                throw new VTPLException("未识别设备：" + r.getDeviceCode());
+            }
+            if("设备错误".equals(device.getMemo())){
+                throw new VTPLException("设备"+device.getDeviceCode()+"不可用，请先检查设备");
             }
             if (device.getDeviceLat() == null || device.getDeviceLng() == null) {
                 MapInfoVO mapInfoVO = mapService.queryFloorCenterLngLat(device.getInstallCampus(), device.getInstallBuilding(), device.getInstallRoom());
@@ -103,14 +105,16 @@ public class LocationEcardService {
                         device.setGisLeaf(Integer.parseInt(mapInfoVO.getLevel()));
                     locationEcardDeviceDao.updateByPrimaryKey(device);
                 } catch (Exception e) {
-                    logger.warn("获取经纬度失败", e);
+                    device.setMemo("设备错误");
+                    locationEcardDeviceDao.updateByPrimaryKey(device);
+                    logger.warn("获取经纬度失败:"+device.getDeviceCode(), e);
                     e.printStackTrace();
                     continue;
                 }
             }
             LocationCampusInfo locationCampusInfo = campusInfoDao.selectOneByName(device.getInstallCampus());
-            if(locationCampusInfo == null){
-                throw new VTPLException("校区不存在:"+device.getInstallCampus());
+            if (locationCampusInfo == null) {
+                throw new VTPLException("校区不存在:" + device.getInstallCampus());
             }
             locationLatest.setZoneId(String.valueOf(locationCampusInfo.getCampusId()));
 
@@ -127,9 +131,9 @@ public class LocationEcardService {
                     throw new VTPLException("学工信息不存在:" + r.getUserCode());
                 }
             } catch (VTPLException ve) {
-                logger.warn("数据接收失败:"+ ve.getMessage());
+                logger.warn("数据转换失败:" + ve.getMessage());
                 continue;
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.warn("接收一卡通数据时发生未知错误", e);
                 continue;
             }
@@ -141,8 +145,13 @@ public class LocationEcardService {
 
             locationLatests.add(locationLatest);
         }
-        locationLatestDao.deleteBatchById(covertListStringToInSQL(locationLatests.stream().map(LocationLatest::getUserid).collect(Collectors.toList())));
-        locationLatestDao.insertBatch(locationLatests);
+        if (locationLatests.size() > 0)
+            locationLatestDao.deleteBatchById(covertListStringToInSQL(locationLatests.stream().map(LocationLatest::getUserid).collect(Collectors.toList())));
+        if (locationLatests.size() > 1) {
+            locationLatestDao.insertBatch(locationLatests);
+        } else if (locationLatests.size() == 1) {
+            locationLatestDao.insert(locationLatests.get(0));
+        }
         locationEcardUseRecordDao.deleteBatchById(covertListStringToInSQL(records.stream().map(LocationEcardUseRecord::getRecordCode).collect(Collectors.toList())));
 
         logger.info("一卡通定时器执行了一个任务，用时" + (System.currentTimeMillis() - startTime) / 1000 + "s");
@@ -152,10 +161,10 @@ public class LocationEcardService {
         studentMap = null;
     }
 
-    private static StudentInfo getStudentFromMap(String id){
+    private static StudentInfo getStudentFromMap(String id) {
         if (studentMap == null) {
             studentMap = getStudentMap(50000);
-            logger.info("初始化学生数据：" + studentMap.size() +" 条");
+            logger.info("初始化学生数据：" + studentMap.size() + " 条");
         }
         return studentMap.get(id);
     }

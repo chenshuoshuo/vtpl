@@ -31,6 +31,14 @@ public class MessageBean<T>  extends MessageBaseBean implements Serializable {
      */
     private T data;
 
+    public static MessageBean error(String msg) {
+        MessageBean messageBean = new MessageBean();
+        messageBean.setStatus(true);
+        messageBean.setCode(200);
+        messageBean.setMessage(msg);
+        return messageBean;
+    }
+
     public T getData() {
         return data;
     }
