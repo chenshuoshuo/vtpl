@@ -166,6 +166,7 @@ public class LocationEcardService {
 
     public static void clear() {
         studentMap = null;
+        teacherMap = null;
     }
 
     private static StudentInfo getStudentFromMap(String id) {
