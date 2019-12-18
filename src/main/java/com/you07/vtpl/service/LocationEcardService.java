@@ -6,6 +6,7 @@ import com.you07.eas.service.StudentInfoService;
 import com.you07.eas.service.TeacherInfoService;
 import com.you07.map.service.MapService;
 import com.you07.map.vo.MapInfoVO;
+import com.you07.util.StringUtil;
 import com.you07.vtpl.VTPLException;
 import com.you07.vtpl.dao.LocationCampusInfoDao;
 import com.you07.vtpl.dao.LocationEcardDeviceDao;
@@ -147,7 +148,8 @@ public class LocationEcardService {
             locationLatest.setInSchool(1);
             locationLatest.setLng(device.getDeviceLng());
             locationLatest.setLat(device.getDeviceLat());
-            locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
+            if(device.getGisLeaf() != null)
+                locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
             locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
 
             locationLatests.add(locationLatest);
