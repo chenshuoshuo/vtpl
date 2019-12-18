@@ -7,6 +7,7 @@ import com.you07.eas.vo.OrgVO;
 import com.you07.eas.vo.StudentVO;
 import com.you07.eas.vo.TeacherVO;
 import com.you07.util.RestTemplateUtil;
+import com.you07.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -45,6 +46,6 @@ public class TeacherInfoService {
         Map<String,OrgVO> orgVOMap = getOrgVO().stream().collect(Collectors.toMap(OrgVO::getOrganizationCode, o->o));
         List<TeacherVO> teacherVOS = getTeacherList(size);
 
-        return teacherVOS.stream().collect(Collectors.toMap(TeacherVO::getStaffNumber, t->new TeacherInfo(t, orgVOMap.get(t.getOrganizationCode()))));
+        return teacherVOS.stream().filter(t-> StringUtil.isNotEmpty(t.getOrganizationCode())).collect(Collectors.toMap(TeacherVO::getStaffNumber, t->new TeacherInfo(t, orgVOMap.get(t.getOrganizationCode()))));
     }
 }
