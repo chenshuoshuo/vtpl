@@ -91,7 +91,6 @@ public class LocationEcardService {
         List<LocationLatest> locationLatests = new ArrayList<>();
         for (LocationEcardUseRecord r : records) {
             LocationEcardDevice device = locationEcardDeviceDao.selectByPrimaryKey(r.getDeviceCode());
-            LocationLatest locationLatest = new LocationLatest();
             try {
                 if (device == null) {
                     throw new VTPLException("未识别设备：" + r.getDeviceCode());
@@ -120,39 +119,38 @@ public class LocationEcardService {
                 if (locationCampusInfo == null) {
                     throw new VTPLException("校区不存在:" + device.getInstallCampus());
                 }
-                locationLatest.setZoneId(String.valueOf(locationCampusInfo.getCampusId()));
 
-                locationLatest.setUserid(r.getUserCode());
-                locationLatest.setLocationTime(r.getUseTime());
-                locationLatest.setAccountMac(r.getEcardNo());
-
+                LocationLatest locationLatest = null;
                 //如果无法获取到学工信息，跳过该记录
                 //从缓存中获取学工数据
                 TeacherInfo teacherInfo = getTeacherFromMap(r.getUserCode());
                 StudentInfo studentInfo = getStudentFromMap(r.getUserCode());
                 if (studentInfo != null && studentInfo.getStudentno() != null) {
-                    locationLatest.setDataByStudentInfo(studentInfo);
+                    locationLatest = new LocationLatest(studentInfo);
                 }else if(teacherInfo != null && teacherInfo.getTeachercode()!= null) {
-                    locationLatest.setDataByTeacherInfo(teacherInfo);
+                    locationLatest = new LocationLatest(teacherInfo);
                 }else {
                     throw new VTPLException("学工信息不存在:" + r.getUserCode());
 
                 }
+                locationLatest.setZoneId(String.valueOf(locationCampusInfo.getCampusId()));
+
+                locationLatest.setLocationTime(r.getUseTime());
+                locationLatest.setAccountMac(r.getEcardNo());
+                locationLatest.setInSchool(1);
+                locationLatest.setLng(device.getDeviceLng());
+                locationLatest.setLat(device.getDeviceLat());
+                if(device.getGisLeaf() != null)
+                    locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
+                locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
+
+                locationLatests.add(locationLatest);
             } catch (VTPLException ve) {
                 logger.warn("数据转换失败:" + ve.getMessage());
-                continue;
             } catch (Exception e) {
                 logger.warn("接收一卡通数据时发生未知错误", e);
-                continue;
             }
-            locationLatest.setInSchool(1);
-            locationLatest.setLng(device.getDeviceLng());
-            locationLatest.setLat(device.getDeviceLat());
-            if(device.getGisLeaf() != null)
-                locationLatest.setFloorid(String.valueOf(device.getGisLeaf()));
-            locationLatest.setUsrUpdateTime(new Date(System.currentTimeMillis()));
 
-            locationLatests.add(locationLatest);
         }
         if (locationLatests.size() > 0)
             locationLatestDao.deleteBatchById(covertListStringToInSQL(locationLatests.stream().map(LocationLatest::getUserid).collect(Collectors.toList())));

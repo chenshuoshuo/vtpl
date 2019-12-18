@@ -289,17 +289,4 @@ public class LocationLatest {
         this.type = type;
     }
 
-    public void setDataByStudentInfo(StudentInfo studentInfo) {
-        setRealname(studentInfo.getName());
-        setGender(studentInfo.getGender());
-        setOrgCode(studentInfo.getOrgCode());
-        setOrgName(studentInfo.getOrgName());
-    }
-
-    public void setDataByTeacherInfo(TeacherInfo teacherInfo) {
-        setRealname(teacherInfo.getName());
-        setGender(teacherInfo.getGender());
-        setOrgCode(teacherInfo.getOrgCode());
-        setOrgName(teacherInfo.getOrgName());
-    }
 }
