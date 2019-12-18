@@ -94,6 +94,9 @@ public class TeacherInfo implements java.io.Serializable{
 		setTel(teacherVO.getMobile());
 		setGender(teacherVO.getGender());
 		setName(teacherVO.getRealName());
+		if(orgVO == null){
+			throw new NullPointerException("组织不存在:"+teacherVO.getOrganizationCode());
+		}
 		setOrgCode(orgVO.getOrganizationCode());
 		setOrgName(orgVO.getOrganizationName());
 	}
