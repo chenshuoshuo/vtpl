@@ -140,8 +140,8 @@ public class RuijieUpdateUserInfoSchedule implements java.io.Serializable{
 				locationLatest.setUserid(studentInfo.getStudentno());
 				locationLatest.setRealname(studentInfo.getName());
 				locationLatest.setGender(studentInfo.getGender());
-				locationLatest.setOrgCode(studentInfo.getClassInfo().getClasscode());
-				locationLatest.setOrgName(studentInfo.getClassInfo().getClassname());
+				locationLatest.setOrgCode(studentInfo.getOrgCode());
+				locationLatest.setOrgName(studentInfo.getOrgName());
 
 				USER_MAP.put(studentInfo.getStudentno(), locationLatest);
 			}

@@ -38,7 +38,7 @@ public class StudentInfoService {
         JSONObject academyJson = RestTemplateUtil.getJSONObjectForCmIps("/os/academy/get/"+majorVO.getAcademyCode());
         AcademyVO academyVO = academyJson.getObject("data", AcademyVO.class);
 
-        return new StudentInfo(studentVO, academyVO);
+        return new StudentInfo(studentVO, majorVO, academyVO);
     }
 
     public List<StudentInfo> getInSchool(Integer schoolYear){
@@ -98,7 +98,7 @@ public class StudentInfoService {
                 AcademyVO academyVO = academyMap.get(majorVO.getAcademyCode());
                 if(academyVO == null)
                     continue;
-                stuMap.put(studentVO.getStudentNo(), new StudentInfo(studentVO, academyVO));
+                stuMap.put(studentVO.getStudentNo(), new StudentInfo(studentVO, majorVO, academyVO));
             }catch (Exception e){
                 e.printStackTrace();
                 continue;

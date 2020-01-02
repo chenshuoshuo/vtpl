@@ -49,6 +49,10 @@ public class LocationLatest {
      */
     private String orgName;
     /**
+     * 班级代码
+     **/
+    private String classCode;
+    /**
      * 位置经度
      */
     private Double lng;
@@ -109,16 +113,18 @@ public class LocationLatest {
         setGender(studentVO.getGender());
         setRealname(studentVO.getRealName());
         setTelephone(studentVO.getTelephone());
-        setOrgCode(studentVO.getClassCode());
+        setOrgCode(academyVO.getAcademyCode());
         setOrgName(academyVO.getAcademyName());
+        setClassCode(studentVO.getClassCode());
     }
 
     public LocationLatest(StudentInfo studentInfo) {
         setUserid(studentInfo.getStudentno());
         setRealname(studentInfo.getName());
         setGender(studentInfo.getGender());
-        setOrgCode(studentInfo.getClassInfo().getClasscode());
+        setOrgCode(studentInfo.getOrgCode());
         setOrgName(studentInfo.getOrgName());
+        setClassCode(studentInfo.getClassCode());
     }
 
     public LocationLatest(TeacherInfo teacherInfo) {
@@ -289,4 +295,11 @@ public class LocationLatest {
         this.type = type;
     }
 
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
 }

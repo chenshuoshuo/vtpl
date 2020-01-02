@@ -76,9 +76,6 @@ cas:
   shenlan:
     udp-port: 48910
 
-#一卡通定时器执行频率
-ecard:
-  cron: 0 * * * * *
 
 
 #定位系统：
