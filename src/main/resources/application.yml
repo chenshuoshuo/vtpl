@@ -105,6 +105,11 @@ location:
   huawei:
     udp_port: 32180
 
+#一卡通定时器执行频率
+ecard:
+    max-data-count: 500
+    cron: 0 * * * * *
+
 #请求认证的接口地址
 oauth:
   client-id: cmccr-guest
