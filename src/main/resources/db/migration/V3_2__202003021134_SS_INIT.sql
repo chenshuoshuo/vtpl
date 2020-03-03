@@ -63,6 +63,7 @@ comment on column ss_group.memo is
 create table ss_marker (
    marker_id            SERIAL               not null,
    marker_name          VARCHAR(255)         null,
+   campus_code          INT4                 null,
    module_id            INT4                 null,
    geom                 geometry             null,
    icon                 VARCHAR(1024)        null,
