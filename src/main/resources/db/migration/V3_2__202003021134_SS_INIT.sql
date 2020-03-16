@@ -22,7 +22,9 @@ create table ss_group (
    group_id             SERIAL               not null,
    docking_id           INT4                 null,
    group_name           VARCHAR(50)          null,
+   group_en_name        VARCHAR(50)          null,
    color                VARCHAR(20)          null,
+   icon                 VARCHAR(1024)        null,
    update_time          TIMESTAMP            null,
    special_person_id    VARCHAR(50)[]        null,
    order_id             INT4                 null,
@@ -41,6 +43,12 @@ comment on column ss_group.docking_id is
 
 comment on column ss_group.group_name is
 '分组名称：group_name';
+
+comment on column ss_group.group_en_name is
+'分组英文名称：group_en_name';
+
+comment on column ss_group.icon is
+'标签图标：icon';
 
 comment on column ss_group.color is
 '颜色代码：color';
